@@ -1,4 +1,4 @@
-# REXX: ECLIPSE PROTOCOL — v1.0.1
+# REXX: ECLIPSE PROTOCOL — v1.0.2
 
 Survivor / bullet heaven original em HTML5, CSS e JavaScript, com Canvas 2D. Todo o jogo roda no cliente, sem backend, conta, API, anúncio ou download de assets em tempo de execução.
 
@@ -51,7 +51,7 @@ Os três retransmissores azuis no radar são objetivos opcionais: fique perto de
 - HUD, radar, pausa, level up, animação de baú, vitória e derrota.
 - Música e efeitos originais sintetizados por Web Audio, com controles de volume separados.
 
-Os seis agentes usam sprites PNG animados originais. Inimigos, chefes, cenário, itens e efeitos continuam procedurais, feitos com Canvas e CSS. Veja SPRITES.md para o estado exato da atualização. A trilha sintetizada evita arquivos grandes e dependências de codecs. As pastas de assets documentam onde acrescentar WebP, spritesheets ou faixas de áudio futuramente; a versão entregue não depende dessas substituições.
+Os seis agentes, os inimigos das cinco regiões e os cinco chefes usam sprites PNG animados originais. Cenário, itens, armas e efeitos continuam procedurais, feitos com Canvas e CSS. Abra assets/images/enemies/preview.html para consultar as novas folhas animadas. Veja SPRITES.md para o estado exato da atualização. A trilha sintetizada evita arquivos grandes e dependências de codecs. As pastas de assets documentam onde acrescentar WebP, spritesheets ou faixas de áudio futuramente; a versão entregue não depende dessas substituições.
 
 ## Desbloqueios
 

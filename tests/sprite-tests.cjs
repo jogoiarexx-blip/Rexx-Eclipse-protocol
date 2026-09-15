@@ -48,6 +48,27 @@ const fs = require("fs"),
     new Promise((resolve) => setTimeout(() => resolve(false), 2000)),
   ]);
   assert.equal(ready, true, "Atlas did not load at the expected dimensions");
+  const enemyReady = await A.enemySprites.loaded;
+  assert.equal(enemyReady.length, 6);
+  assert.ok(enemyReady.every(Boolean), "Enemy and boss atlas files must load");
+  let enemyFrames = 0;
+  for (const sheet of A.enemySprites.sheets) {
+    for (const [id, animation] of Object.entries(sheet.animations)) {
+      assert.equal(animation.frames.length, 4);
+      for (const f of animation.frames) {
+        assert.ok(
+          f.x >= 0 &&
+            f.y >= 0 &&
+            f.w > 0 &&
+            f.h > 0 &&
+            f.x + f.w <= sheet.width &&
+            f.y + f.h <= sheet.height,
+        );
+        enemyFrames++;
+      }
+    }
+  }
+  assert.equal(enemyFrames, 260);
   const check = createCanvas(1024, 1536),
     ctx = check.getContext("2d");
   ctx.drawImage(A.sprites.image, 0, 0);
@@ -112,10 +133,42 @@ const fs = require("fs"),
       canvas._canvas.toBuffer("image/png"),
     );
   w.eval(fs.readFileSync(path.join(__dirname, "scenarios.js"), "utf8"));
+  for (const map of w.Rexx.data.maps) {
+    for (const index of map.enemies) {
+      const entity = {
+        id: "e" + index,
+        data: w.Rexx.data.enemies[index],
+        r: 18,
+        x: 60,
+        y: 60,
+        uid: index,
+        status: {},
+        elite: false,
+      };
+      const match = A.enemySprites.match(entity, map.id);
+      assert.equal(match.sheet.id, map.id);
+      const testContext = createCanvas(120, 120).getContext("2d");
+      assert.equal(A.enemySprites.draw(testContext, entity, 1, map.id), true);
+    }
+    const boss = {
+      id: "b" + map.boss,
+      boss: true,
+      data: w.Rexx.data.bosses[map.boss],
+      r: 45,
+      x: 80,
+      y: 80,
+      status: {},
+      elite: true,
+    };
+    assert.equal(A.enemySprites.match(boss, map.id).sheet.id, "bosses");
+  }
   const regression = w.runRexxTests();
   for (const r of regression) assert.ok(r.pass, r.name + " " + r.error);
   const report = {
     atlasLoaded: true,
+    enemyAtlasesLoaded: enemyReady.length,
+    enemyAndBossFrames: enemyFrames,
+    allFiveRegionsMatched: true,
     transparentBackground: true,
     validFrames: 24,
     distinctWalkingFrames: true,

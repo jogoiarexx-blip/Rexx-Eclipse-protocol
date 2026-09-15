@@ -1,0 +1,14 @@
+{
+  "atlasLoaded": true,
+  "enemyAtlasesLoaded": 6,
+  "enemyAndBossFrames": 260,
+  "allFiveRegionsMatched": true,
+  "transparentBackground": true,
+  "validFrames": 24,
+  "distinctWalkingFrames": true,
+  "menuPortraits": 6,
+  "movementAndIdle": true,
+  "regressionGroups": 16,
+  "allPassed": true,
+  "environment": "JSDOM + native Canvas; not a real-browser visual test"
+}

@@ -351,6 +351,8 @@ Rexx.Engine = class {
     }
   }
   entity(c, e, t) {
+    if (this.app.enemySprites?.draw(c, e, t, this.app.game?.map.id || "zero"))
+      return;
     c.save();
     c.translate(e.x, e.y);
     let color =

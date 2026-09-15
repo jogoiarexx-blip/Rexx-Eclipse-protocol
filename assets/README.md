@@ -1,7 +1,7 @@
 # Assets
 
-`images/zone-zero/agents-walk.png` contém 24 quadros originais dos seis agentes, com alfa verdadeiro. O atlas é usado no jogo e nos retratos. `atlas.json` descreve as células.
+`images/zone-zero/agents-walk.png`: 24 quadros dos seis agentes, com alfa verdadeiro.
 
-As demais entidades e o cenário continuam sendo desenhados por Canvas/CSS. O áudio é sintetizado por Web Audio. `ui/core.svg` é o ícone original.
+`images/enemies/`: cinco folhas regionais e uma de chefes, 260 quadros transparentes, atlas JSON/JavaScript, prompts e prévia animada offline (`preview.html`). O renderizador seleciona a variante do mapa atual.
 
-A folha de inimigos em `../art-source/` é um rascunho não integrado. Veja `../SPRITES.md`.
+Cenário, itens, armas e efeitos usam Canvas/CSS. O áudio é sintetizado via Web Audio. `ui/core.svg` é o ícone original. Veja `../SPRITES.md` para detalhes e limites.

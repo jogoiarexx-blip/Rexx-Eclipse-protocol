@@ -1,0 +1,115 @@
+[
+  {
+    "sheet": "zero",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "sequences": 12,
+    "frames": 48,
+    "rowCuts": [
+      0,
+      200,
+      386,
+      561,
+      758,
+      982,
+      1254
+    ]
+  },
+  {
+    "sheet": "glass",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "sequences": 12,
+    "frames": 48,
+    "rowCuts": [
+      0,
+      209,
+      412,
+      614,
+      800,
+      979,
+      1254
+    ]
+  },
+  {
+    "sheet": "omega",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "sequences": 12,
+    "frames": 48,
+    "rowCuts": [
+      0,
+      194,
+      397,
+      593,
+      780,
+      986,
+      1254
+    ]
+  },
+  {
+    "sheet": "forest",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "sequences": 12,
+    "frames": 48,
+    "rowCuts": [
+      0,
+      193,
+      365,
+      576,
+      787,
+      997,
+      1254
+    ]
+  },
+  {
+    "sheet": "abyss",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "sequences": 12,
+    "frames": 48,
+    "rowCuts": [
+      0,
+      209,
+      395,
+      580,
+      801,
+      995,
+      1254
+    ]
+  },
+  {
+    "sheet": "bosses",
+    "size": [
+      1122,
+      1402
+    ],
+    "alpha": true,
+    "sequences": 5,
+    "frames": 20,
+    "rowCuts": [
+      0,
+      261,
+      525,
+      759,
+      1056,
+      1402
+    ]
+  }
+]

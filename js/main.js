@@ -47,6 +47,7 @@
   Rexx.app = app;
   app.audio = new Rexx.Audio();
   app.sprites = new Rexx.Sprites();
+  app.enemySprites = new Rexx.EnemySprites();
   app.input = new Rexx.Input(() => app.pause());
   app.ui = new Rexx.UI(app);
   app.engine = new Rexx.Engine(app, document.getElementById("game"));

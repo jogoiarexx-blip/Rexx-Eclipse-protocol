@@ -1,44 +1,31 @@
-# Sprites — atualização 1.0.1 (agentes)
+# Sprites — atualização 1.0.2
 
-## Aplicado ao jogo
+## Integrados ao jogo
 
-- Rexx Vektor, Nyra Flux, Brakk Ferrol, Suri Rastro, Ilya Boreal e NUL-7.
-- 24 quadros: quatro por agente, em uma folha PNG com canal alfa verdadeiro.
-- Animação de caminhada a 8 quadros por segundo, acionada pelo movimento.
-- Primeiro quadro quando o agente está parado.
-- Espelhamento horizontal ao andar para a esquerda.
-- Retratos reais nas telas de seleção e consulta de personagens.
-- Carregamento local compatível com a estrutura offline existente.
-- O desenho procedural continua disponível automaticamente se a imagem não carregar.
-- Colisões, atributos, armas, progresso e desbloqueios mantêm as regras da versão anterior.
+- Seis agentes: 24 quadros de caminhada, retratos, repouso e espelhamento horizontal.
+- Cinco folhas regionais de inimigos: Zona Zero, Deserto de Vidro, Complexo Ômega, Floresta Corrompida e Abismo.
+- Cada folha regional contém 12 sequências de quatro quadros: 240 quadros ao todo. São variantes regionais das 22 espécies do jogo, incluindo quatro variantes específicas de elites; não são 60 espécies diferentes.
+- Uma folha dos cinco chefes: quatro quadros por chefe, totalizando 20 quadros.
+- Total desta atualização: 260 quadros novos; 284 contando os agentes anteriores.
+- PNGs originais com transparência verdadeira, carregados localmente. Renderização procedural de segurança se algum recurso não carregar.
+- As elites sem sequência exclusiva usam o sprite da espécie com escala e efeitos de elite.
 
-A folha contém uma única orientação frontal/sul. Ela **não** contém animações independentes para norte, leste e oeste, nem sequências desenhadas separadamente de ataque ou morte. Os efeitos de combate continuam sendo os procedurais do jogo.
+## Abrir e consultar
 
-## Arquivos
+Abra `index.html` para jogar. Para conferir todas as novas sequências, abra `assets/images/enemies/preview.html`: escolha a região e ajuste a velocidade ou pause.
 
-`assets/images/zone-zero/agents-walk.png`: 1024 × 1536, quatro colunas e seis linhas, células de 256 × 256.
+As seis pastas em `assets/images/enemies/` contêm PNG, atlas JSON e prompt de criação. O atlas raiz descreve os retângulos reais de cada quadro; não presuma células de tamanho fixo. `atlas-data.js` permite carregamento offline sem fetch.
 
-`assets/images/zone-zero/atlas.json`: posições, personagens, tamanho das células e cadência.
+`js/core/enemySprites.js` associa espécie, região e chefe aos quadros. `js/core/sprites.js` permanece responsável pelos agentes. A aparência é independente das colisões e dos atributos.
 
-`js/core/sprites.js`: carregamento e desenho dos quadros.
+## Limites da arte
 
-## Ainda NÃO concluído para a Zona Zero
+As folhas têm uma orientação frontal/sul em perspectiva superior. Não incluem oito direções ou sequências independentes de ataque e morte. Há pequenas variações de contorno entre quadros gerados. Terreno, ruínas, itens, armas e efeitos continuam procedurais. Portanto, esta entrega conclui as folhas regionais de inimigos e chefes, não todos os elementos visuais do cenário.
 
-| Grupo | Estado |
-|---|---|
-| 6 agentes | Sprites aplicados, com as limitações de orientação descritas acima |
-| 12 tipos de inimigos da região | Continuam procedurais |
-| Elites | Continuam procedurais |
-| Arconte das Antenas e Leviatã de Sílica | Continuam procedurais |
-| Terreno, ruínas, retransmissores e decoração | Continuam procedurais |
-| Itens, armas e efeitos | Continuam procedurais |
+O arquivo `art-source/enemies-a-draft-not-integrated.png` é um rascunho histórico opaco, substituído pelas novas folhas e não usado pelo jogo.
 
-A geração de imagens atingiu um limite temporário durante o trabalho. A folha de seis inimigos em `art-source/enemies-a-draft-not-integrated.png` foi preservada como rascunho. Ela contém um fundo quadriculado opaco e **não está integrada ao renderizador**. Não é uma folha transparente pronta para produção.
+## Produção e validação
 
-Esta atualização integra os agentes disponíveis. Ela não representa a conclusão de todos os sprites da primeira fase.
+Método: geração de imagens integrada, com prompts preservados junto das folhas, sem assets de outros jogos. PNGs preservados sem edição. Coordenadas extraídas por inspeção do canal alfa.
 
-## Produção
-
-Método: ferramenta integrada de geração de imagens, sem uso de API por chave própria. Os prompts estão em `art-source/PROMPTS.md`.
-
-A integração foi validada com renderização Canvas e testes automatizados. A limitação anterior de validação em navegador real permanece descrita em `TESTES.md`.
+Validados: seis folhas, 260 retângulos, associação de todas as regiões e chefes, transparência e renderização Canvas. Os 16 grupos de regressão passaram. Ambiente: JSDOM + Canvas nativo; não foi uma sessão em navegador real. Veja `TESTES.md`.

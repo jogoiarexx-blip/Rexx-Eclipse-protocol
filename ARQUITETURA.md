@@ -61,7 +61,7 @@ Os limites preservam a continuidade da simulação em picos; disparos e partícu
 
 **Boss:** use ID estável, HP, dano, identidade e tipo em `data/enemies.js`; seus padrões ficam em `entities/boss.js`. Os estágios mudam aos limiares de 65% e 30% de HP.
 
-**Arte:** o jogo atual desenha proceduralmente. Sprites WebP podem substituir `Engine.entity`, `Engine.player` e `Engine.tile` sem alterar a simulação. Pré-carregue recursos locais antes da primeira partida; preserve dimensões de colisão independentes da imagem.
+**Arte:** `js/core/sprites.js` carrega os agentes; `js/core/enemySprites.js` usa `assets/images/enemies/atlas-data.js` para selecionar animações de inimigos por região e dos cinco chefes. Cenário, itens e efeitos são procedurais. Sprites WebP podem substituir `Engine.entity`, `Engine.player` e `Engine.tile` sem alterar a simulação. Pré-carregue recursos locais antes da primeira partida; preserve dimensões de colisão independentes da imagem.
 
 **Áudio:** o sintetizador é funcional e autoral. Para substituir por faixas comprimidas, preserve a interface `init`, `play` e `update`, e as configurações de volume geral, música e efeitos.
 

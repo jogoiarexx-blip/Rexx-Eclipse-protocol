@@ -83,3 +83,9 @@ Executado `tests/sprite-tests.cjs` com o atlas real: carregamento, dimensões, t
 Foi inspecionada uma renderização do campo com o sprite do Rexx. O teste usa JSDOM e Canvas nativo, não um navegador real. A suíte contorna uma identificação incorreta do decoder de testes ao ignorar metadados auxiliares apenas durante a decodificação em memória; o PNG distribuído mantém seus pixels e metadados originais.
 
 Resultado bruto: `tests/results/sprite-results.json`. Reproduzir com `npm run test:sprites` após instalar as dependências opcionais de desenvolvimento.
+
+## Atualização 1.0.2 — inimigos e chefes por região
+
+A suíte `tests/sprite-tests.cjs` passou com as seis novas folhas: 260 retângulos válidos, todas as cinco regiões associadas corretamente, cinco chefes encontrados, transparência e desenho Canvas. Agentes, retratos e os 16 grupos de regressão também passaram.
+
+Resultado: `tests/results/sprite-results-v1.0.2.json`. Uma renderização do campo foi inspecionada visualmente. Ambiente JSDOM + Canvas nativo; não houve teste visual em navegador real ou medição de FPS em hardware de jogador. Os PNGs distribuídos são os originais; o contorno do decoder descrito acima ocorre apenas em memória nos testes.
