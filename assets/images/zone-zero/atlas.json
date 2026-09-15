@@ -1,0 +1,25 @@
+{
+  "image": "agents-walk.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "cell": [
+    256,
+    256
+  ],
+  "columns": 4,
+  "rows": 6,
+  "fps": 8,
+  "direction": "south; mirrored for leftward movement; no north-facing frames",
+  "characters": {
+    "rexx": 0,
+    "nyra": 1,
+    "brakk": 2,
+    "suri": 3,
+    "ilya": 4,
+    "null": 5
+  },
+  "state": "integrated",
+  "other_zone_zero_art": "procedural; raster assets not completed"
+}

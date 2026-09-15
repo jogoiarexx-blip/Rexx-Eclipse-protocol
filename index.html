@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#09141c" />
+    <title>REXX: Eclipse Protocol</title>
+    <link rel="icon" href="assets/ui/core.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/menu.css" />
+    <link rel="stylesheet" href="css/hud.css" />
+    <script defer src="js/config.js"></script>
+    <script defer src="js/data/weapons.js"></script>
+    <script defer src="js/data/upgrades.js"></script>
+    <script defer src="js/data/characters.js"></script>
+    <script defer src="js/data/enemies.js"></script>
+    <script defer src="js/data/maps.js"></script>
+    <script defer src="js/core/pool.js"></script>
+    <script defer src="js/core/collision.js"></script>
+    <script defer src="js/core/save.js"></script>
+    <script defer src="js/core/input.js"></script>
+    <script defer src="js/core/camera.js"></script>
+    <script defer src="js/core/audio.js"></script>
+    <script defer src="js/core/sprites.js"></script>
+    <script defer src="js/entities/player.js"></script>
+    <script defer src="js/entities/enemy.js"></script>
+    <script defer src="js/entities/boss.js"></script>
+    <script defer src="js/entities/projectile.js"></script>
+    <script defer src="js/entities/pickup.js"></script>
+    <script defer src="js/systems/damageSystem.js"></script>
+    <script defer src="js/systems/particleSystem.js"></script>
+    <script defer src="js/systems/levelSystem.js"></script>
+    <script defer src="js/systems/upgradeSystem.js"></script>
+    <script defer src="js/systems/enemySpawner.js"></script>
+    <script defer src="js/systems/weaponBehaviors.js"></script>
+    <script defer src="js/systems/weaponSystem.js"></script>
+    <script defer src="js/systems/achievementSystem.js"></script>
+    <script defer src="js/game.js"></script>
+    <script defer src="js/core/engine.js"></script>
+    <script defer src="js/ui/menu.js"></script>
+    <script defer src="js/ui/hud.js"></script>
+    <script defer src="js/ui/levelUp.js"></script>
+    <script defer src="js/ui/pause.js"></script>
+    <script defer src="js/ui/gameOver.js"></script>
+    <script defer src="js/main.js"></script>
+  </head>
+  <body>
+    <canvas id="game" aria-label="Campo de batalha Eclipse"></canvas>
+    <div id="hud" class="hidden"></div>
+    <main id="ui"></main>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <noscript
+      >Ative o JavaScript para executar REXX: Eclipse Protocol.</noscript
+    >
+  </body>
+</html>

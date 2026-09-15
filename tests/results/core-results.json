@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Content counts",
+    "pass": true,
+    "detail": {
+      "weapons": 15,
+      "achievements": 33
+    }
+  },
+  {
+    "name": "Movement, diagonal normalization, boundaries and pause",
+    "pass": true
+  },
+  {
+    "name": "Spatial hash and pool reuse",
+    "pass": true
+  },
+  {
+    "name": "Damage, armor, resistance, invincibility and death",
+    "pass": true
+  },
+  {
+    "name": "XP collection, queued levels and all upgrade card actions",
+    "pass": true
+  },
+  {
+    "name": "Every weapon base and evolution causes damage",
+    "pass": true,
+    "detail": [
+      "orbital:5010",
+      "orbital+:11565",
+      "tesla:5868",
+      "tesla+:30895",
+      "drone:1654",
+      "drone+:9991",
+      "solar:5169",
+      "solar+:13239",
+      "gravity:2986",
+      "gravity+:17318",
+      "ghost:2412",
+      "ghost+:5995",
+      "meteor:14898",
+      "meteor+:70257",
+      "prism:1309",
+      "prism+:8368",
+      "mine:4163",
+      "mine+:6712",
+      "disc:16149",
+      "disc+:23469",
+      "frost:2538",
+      "frost+:4317",
+      "toxin:6965",
+      "toxin+:16321",
+      "rail:861",
+      "rail+:6557",
+      "boomerang:2403",
+      "boomerang+:5807",
+      "nova:4479",
+      "nova+:22353"
+    ]
+  },
+  {
+    "name": "All 15 evolution recipes require max level and passive",
+    "pass": true
+  },
+  {
+    "name": "Seven statuses and DOT",
+    "pass": true
+  },
+  {
+    "name": "All drops, chest queue and reward UI",
+    "pass": true
+  },
+  {
+    "name": "Five bosses: attacks, phases, final victory and map unlock",
+    "pass": true
+  },
+  {
+    "name": "Boss spawns even with pool at capacity",
+    "pass": true
+  },
+  {
+    "name": "Wave milestones and environmental mechanisms",
+    "pass": true
+  },
+  {
+    "name": "Retransmitter objective grants chest and coins",
+    "pass": true
+  },
+  {
+    "name": "Save roundtrip and corrupted JSON fallback",
+    "pass": true
+  },
+  {
+    "name": "Menu renderers, settings and restart",
+    "pass": true
+  },
+  {
+    "name": "Stress: 520 enemies, six evolved weapons and bounded pools",
+    "pass": true,
+    "detail": {
+      "enemies": 520,
+      "peakProjectiles": 26,
+      "frames": 300
+    }
+  }
+]

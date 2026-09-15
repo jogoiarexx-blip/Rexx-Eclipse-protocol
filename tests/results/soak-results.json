@@ -1,0 +1,13 @@
+{
+  "timelineSeconds": 1809.4666666656783,
+  "frames": 54286,
+  "level": 80,
+  "kills": 11217,
+  "bosses": 3,
+  "evolutions": 2,
+  "maxEnemies": 194,
+  "maxShots": 104,
+  "maxPickups": 430,
+  "simulationSeconds": 4.1,
+  "note": "Automated invulnerable collector; not a human balance test or an FPS benchmark."
+}
