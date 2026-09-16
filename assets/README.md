@@ -1,3 +1,5 @@
+> Atualização vigente: v1.1.0. Imagens raster convertidas para WebP; PNGs e rascunhos não acompanham o pacote. Agentes agora usam oito poses direcionais com animação JavaScript. Consulte ATUALIZACAO-1.1.0.md na raiz. As seções anteriores abaixo são históricas.
+
 # Assets
 
 `images/zone-zero/agents-walk.png`: 24 quadros dos seis agentes, com alfa verdadeiro.

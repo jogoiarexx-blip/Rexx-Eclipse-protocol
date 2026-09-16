@@ -46,7 +46,7 @@
     sprites.loaded.then((ok) => {
       document.getElementById("status").textContent = ok
         ? "Armas-base. Evoluções usam a mesma arte com os efeitos existentes do jogo."
-        : "Falha ao carregar weapons.png.";
+        : "Falha ao carregar weapons.webp.";
       if (!ok) return;
       for (const weapon of Rexx.data.weapons) {
         const figure = document.createElement("figure"),

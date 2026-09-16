@@ -1,0 +1,104 @@
+{
+  "files": [
+    {
+      "file": "assets/images/agents/directions.webp",
+      "pngBytes": 1892382,
+      "webpBytes": 1407606,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/enemies/01-Zona-Zero/inimigos.webp",
+      "pngBytes": 2033131,
+      "webpBytes": 1598076,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/enemies/02-Deserto-de-Vidro/inimigos.webp",
+      "pngBytes": 2113157,
+      "webpBytes": 1658662,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/enemies/03-Complexo-Omega/inimigos.webp",
+      "pngBytes": 2375960,
+      "webpBytes": 1911806,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/enemies/04-Floresta-Corrompida/inimigos.webp",
+      "pngBytes": 2366615,
+      "webpBytes": 1804956,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/enemies/05-Abismo/inimigos.webp",
+      "pngBytes": 2179808,
+      "webpBytes": 1780702,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/enemies/06-Chefes/chefes.webp",
+      "pngBytes": 2515513,
+      "webpBytes": 1905796,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/ground/abyss.webp",
+      "pngBytes": 2631019,
+      "webpBytes": 179652,
+      "lossless": false
+    },
+    {
+      "file": "assets/images/ground/forest.webp",
+      "pngBytes": 3343240,
+      "webpBytes": 413118,
+      "lossless": false
+    },
+    {
+      "file": "assets/images/ground/glass.webp",
+      "pngBytes": 3132198,
+      "webpBytes": 347052,
+      "lossless": false
+    },
+    {
+      "file": "assets/images/ground/omega.webp",
+      "pngBytes": 2696543,
+      "webpBytes": 191838,
+      "lossless": false
+    },
+    {
+      "file": "assets/images/ground/zero.webp",
+      "pngBytes": 3540962,
+      "webpBytes": 462870,
+      "lossless": false
+    },
+    {
+      "file": "assets/images/pickups/items.webp",
+      "pngBytes": 2247651,
+      "webpBytes": 1069400,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/scenery/props.webp",
+      "pngBytes": 2427418,
+      "webpBytes": 1181910,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/weapons/weapons.webp",
+      "pngBytes": 2233881,
+      "webpBytes": 1034242,
+      "lossless": true
+    },
+    {
+      "file": "assets/images/zone-zero/agents-walk.webp",
+      "pngBytes": 2134982,
+      "webpBytes": 957262,
+      "lossless": true
+    }
+  ],
+  "beforeBytes": 39864460,
+  "afterBytes": 17904948,
+  "alphaPreserved": true,
+  "reductionPercent": 55.1
+}

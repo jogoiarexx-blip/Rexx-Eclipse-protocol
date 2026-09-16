@@ -96,7 +96,7 @@
       document.getElementById("status").textContent = ok
         ? map.name + " · piso estático, sem efeito sobre colisões."
         : "Não foi possível carregar esta textura.";
-      document.getElementById("source").href = map.id + ".png";
+      document.getElementById("source").href = map.id + ".webp";
     }
     Promise.all([ground.loaded, scenery.loaded]).then(draw);
     document.getElementById("props").addEventListener("change", draw);

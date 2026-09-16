@@ -6,7 +6,7 @@
     {
       "id": "zero",
       "name": "Zona Zero",
-      "image": "01-Zona-Zero/inimigos.png",
+      "image": "01-Zona-Zero/inimigos.webp",
       "width": 1254,
       "height": 1254,
       "rows": 6,
@@ -425,7 +425,7 @@
     {
       "id": "glass",
       "name": "Deserto de Vidro",
-      "image": "02-Deserto-de-Vidro/inimigos.png",
+      "image": "02-Deserto-de-Vidro/inimigos.webp",
       "width": 1254,
       "height": 1254,
       "rows": 6,
@@ -844,7 +844,7 @@
     {
       "id": "omega",
       "name": "Complexo Ômega",
-      "image": "03-Complexo-Omega/inimigos.png",
+      "image": "03-Complexo-Omega/inimigos.webp",
       "width": 1254,
       "height": 1254,
       "rows": 6,
@@ -1263,7 +1263,7 @@
     {
       "id": "forest",
       "name": "Floresta Corrompida",
-      "image": "04-Floresta-Corrompida/inimigos.png",
+      "image": "04-Floresta-Corrompida/inimigos.webp",
       "width": 1254,
       "height": 1254,
       "rows": 6,
@@ -1682,7 +1682,7 @@
     {
       "id": "abyss",
       "name": "Abismo",
-      "image": "05-Abismo/inimigos.png",
+      "image": "05-Abismo/inimigos.webp",
       "width": 1254,
       "height": 1254,
       "rows": 6,
@@ -2101,7 +2101,7 @@
     {
       "id": "bosses",
       "name": "Chefes regionais",
-      "image": "06-Chefes/chefes.png",
+      "image": "06-Chefes/chefes.webp",
       "width": 1122,
       "height": 1402,
       "rows": 5,

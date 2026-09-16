@@ -62,7 +62,7 @@
     sprites.loaded.then((ok) => {
       document.getElementById("status").textContent = ok
         ? "12 sprites: quatro tipos de XP, cinco consumíveis e três quadros do baú."
-        : "Falha ao carregar items.png.";
+        : "Falha ao carregar items.webp.";
       if (!ok) return;
       for (const f of Object.values(sprites.atlas.frames)) {
         const figure = document.createElement("figure"),
