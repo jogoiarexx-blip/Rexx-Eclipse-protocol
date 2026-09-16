@@ -14,7 +14,7 @@ Rexx.UI.prototype.level = function (options) {
   for (const o of options) {
     let d = this.card(
       b,
-      `<span class="micro" style="color:${o.rarity.color}">${o.rarity.name.toUpperCase()} · ${o.kind === "weapon" ? "ARMA" : "MÓDULO"}</span><span class="upgrade-icon" style="color:${o.rarity.color}">${o.icon}</span><h3>${o.name}</h3><span class="micro">NÍVEL ${o.level}</span><p>${o.desc}</p><small>Potência de raridade: ${o.rarity.mult.toFixed(2)}×</small>`,
+      `<span class="micro" style="color:${o.rarity.color}">${o.rarity.name.toUpperCase()} · ${o.kind === "weapon" ? "ARMA" : "MÓDULO"}</span><span class="upgrade-icon" style="color:${o.rarity.color}">${o.kind === "weapon" ? this.app.weaponSprites.icon(o.id, 54) : o.icon}</span><h3>${o.name}</h3><span class="micro">NÍVEL ${o.level}</span><p>${o.desc}</p><small>Potência de raridade: ${o.rarity.mult.toFixed(2)}×</small>`,
     );
     d.style.borderColor = o.rarity.color + "80";
     d.append(
@@ -31,6 +31,8 @@ Rexx.UI.prototype.chest = function (rewards) {
   );
   b.innerHTML =
     '<div class="chest-animation">▣</div><div class="chest-rewards"></div>';
+  const chestSprite = this.app.pickupSprites?.chestElement();
+  if (chestSprite) b.querySelector(".chest-animation").replaceWith(chestSprite);
   for (const r of rewards)
     this.card(
       b.querySelector(".chest-rewards"),

@@ -35,7 +35,14 @@ const fs = require("fs"),
   };
   w.HTMLCanvasElement.prototype.getContext = function () {
     this._canvas ||= createCanvas(this.width, this.height);
-    return this._canvas.getContext("2d");
+    const context = this._canvas.getContext("2d");
+    if (!context._domPatternBridge) {
+      const createPattern = context.createPattern.bind(context);
+      context.createPattern = (image, repeat) =>
+        createPattern(image._canvas || image, repeat);
+      context._domPatternBridge = true;
+    }
+    return context;
   };
   const canvas = w.document.getElementById("game");
   canvas.width = 1280;
@@ -48,6 +55,118 @@ const fs = require("fs"),
     new Promise((resolve) => setTimeout(() => resolve(false), 2000)),
   ]);
   assert.equal(ready, true, "Atlas did not load at the expected dimensions");
+  assert.equal(await A.scenery.loaded, true, "Scenery atlas loads");
+  let sceneryFrames = 0;
+  for (const frames of Object.values(A.scenery.atlas.maps)) {
+    assert.equal(frames.length, 4);
+    for (const f of frames) {
+      assert.ok(
+        f.x >= 0 &&
+          f.y >= 0 &&
+          f.x + f.w <= A.scenery.image.width &&
+          f.y + f.h <= A.scenery.image.height,
+      );
+      sceneryFrames++;
+    }
+  }
+  assert.equal(sceneryFrames, 20);
+  assert.equal(await A.pickupSprites.loaded, true, "Pickup sprites load");
+  assert.equal(Object.keys(A.pickupSprites.atlas.frames).length, 12);
+  const pickupContext = createCanvas(120, 120).getContext("2d");
+  for (const [value, key] of [
+    [1, "xp_small"],
+    [5, "xp_medium"],
+    [10, "xp_large"],
+    [40, "xp_special"],
+  ]) {
+    assert.equal(A.pickupSprites.key({ type: "xp", value }), key);
+    assert.equal(
+      A.pickupSprites.draw(pickupContext, { type: "xp", value, x: 60, y: 60 }),
+      true,
+    );
+  }
+  for (const type of ["heal", "coin", "magnet", "bomb", "energy", "chest"]) {
+    assert.equal(
+      A.pickupSprites.draw(pickupContext, {
+        type,
+        value: 1,
+        x: 60,
+        y: 60,
+        age: 1,
+      }),
+      true,
+    );
+  }
+  assert.equal(A.pickupSprites.draw(pickupContext, { type: "unknown" }), false);
+  assert.equal(
+    A.pickupSprites.chestElement().querySelectorAll("canvas").length,
+    3,
+  );
+  assert.equal(await A.weaponSprites.loaded, true, "Weapon sprites load");
+  assert.equal(Object.keys(A.weaponSprites.atlas.frames).length, 15);
+  for (const weapon of w.Rexx.data.weapons) {
+    assert.ok(A.weaponSprites.atlas.frames[weapon.id]);
+    assert.equal(
+      A.weaponSprites.draw(pickupContext, weapon.id, 60, 60, 40),
+      true,
+    );
+    assert.ok(A.weaponSprites.icon(weapon.id).includes("weapon-art"));
+  }
+  assert.equal(
+    A.weaponSprites.projectile(pickupContext, {
+      weapon: "disc",
+      hostile: false,
+      x: 60,
+      y: 60,
+      r: 6,
+      age: 1,
+    }),
+    true,
+  );
+  assert.equal(
+    A.weaponSprites.projectile(pickupContext, {
+      weapon: "boomerang",
+      hostile: false,
+      x: 60,
+      y: 60,
+      r: 6,
+      age: 1,
+    }),
+    true,
+  );
+  assert.equal(
+    A.weaponSprites.projectile(pickupContext, {
+      weapon: "disc",
+      hostile: true,
+    }),
+    false,
+  );
+  const groundReady = await A.ground.loaded;
+  assert.equal(groundReady.length, 5);
+  assert.ok(groundReady.every(Boolean), "All regional floors must load");
+  const floorContext = canvas.getContext("2d");
+  assert.equal(
+    A.ground.draw(floorContext, { id: "missing" }, 0, 0, 20, 20),
+    false,
+  );
+  for (const map of w.Rexx.data.maps) {
+    const tile = A.ground.tiles.get(map.id)._canvas;
+    const tc = tile.getContext("2d");
+    assert.deepEqual(
+      tc.getImageData(0, 0, 1, 1024).data,
+      tc.getImageData(1023, 0, 1, 1024).data,
+      "Horizontal repeat seam",
+    );
+    assert.deepEqual(
+      tc.getImageData(0, 0, 1024, 1).data,
+      tc.getImageData(0, 1023, 1024, 1).data,
+      "Vertical repeat seam",
+    );
+    assert.equal(
+      A.ground.draw(floorContext, map, -300, -200, 1600, 1000),
+      true,
+    );
+  }
   const enemyReady = await A.enemySprites.loaded;
   assert.equal(enemyReady.length, 6);
   assert.ok(enemyReady.every(Boolean), "Enemy and boss atlas files must load");
@@ -92,6 +211,33 @@ const fs = require("fs"),
   A.start();
   const g = A.game,
     p = g.player;
+  const testContext = canvas.getContext("2d");
+  for (const map of w.Rexx.data.maps) {
+    const fixture = { map, player: g.player, objectives: g.objectives };
+    let total = 0;
+    const columns = Math.ceil(w.Rexx.C.world / A.scenery.cell);
+    for (let row = 0; row < columns; row++)
+      for (let col = 0; col < columns; col++) {
+        const a = A.scenery.placement(fixture, col, row),
+          b = A.scenery.placement(fixture, col, row);
+        assert.deepEqual(a, b, "Scenery positions must remain stable");
+        if (a) {
+          total++;
+          for (const o of fixture.objectives)
+            assert.ok(Math.hypot(a.x - o.x, a.y - o.y) >= 180);
+        }
+      }
+    assert.ok(total > 20);
+    const visible = A.scenery.draw(
+      testContext,
+      fixture,
+      2400,
+      2400,
+      3600,
+      3600,
+    );
+    assert.ok(visible > 0 && visible < total, "Only visible cells are drawn");
+  }
   let captures = [];
   for (const [id, row] of Object.entries(A.sprites.rows)) {
     p.character = w.Rexx.data.characters.find((c) => c.id === id);
@@ -122,6 +268,20 @@ const fs = require("fs"),
   assert.equal(A.ui.root.querySelectorAll(".agent-art").length, 6);
   A.ui.characters();
   assert.equal(A.ui.root.querySelectorAll(".agent-art").length, 6);
+  A.ui.arsenal();
+  assert.equal(A.ui.root.querySelectorAll(".weapon-art").length, 15);
+  A.ui.level([
+    {
+      kind: "weapon",
+      id: "orbital",
+      name: "Lâminas Orbitais",
+      icon: "◈",
+      level: 1,
+      desc: "Teste",
+      rarity: { color: "#fff", name: "Comum", mult: 1 },
+    },
+  ]);
+  assert.equal(A.ui.root.querySelectorAll(".weapon-art").length, 1);
   A.ui.hide();
   p.character = w.Rexx.data.characters[0];
   p.shield = 0;
@@ -132,6 +292,52 @@ const fs = require("fs"),
       path.join(process.env.SCREENSHOTS, "sprites-in-game.png"),
       canvas._canvas.toBuffer("image/png"),
     );
+  if (process.env.SCREENSHOTS) {
+    const originalMap = g.map;
+    for (const map of w.Rexx.data.maps) {
+      g.map = map;
+      A.engine.draw(g);
+      fs.writeFileSync(
+        path.join(process.env.SCREENSHOTS, "ground-" + map.id + ".png"),
+        canvas._canvas.toBuffer("image/png"),
+      );
+    }
+    g.map = originalMap;
+    g.alertLife = 0;
+    const dropTypes = [
+      "xp",
+      "xp",
+      "xp",
+      "xp",
+      "heal",
+      "coin",
+      "magnet",
+      "bomb",
+      "energy",
+      "chest",
+    ];
+    dropTypes.forEach((type, index) =>
+      w.Rexx.Pickup.spawn(
+        g,
+        g.player.x - 180 + (index % 5) * 90,
+        g.player.y + 80 + Math.floor(index / 5) * 70,
+        type,
+        [1, 5, 10, 40][index] || 1,
+      ),
+    );
+    A.engine.draw(g);
+    fs.writeFileSync(
+      path.join(process.env.SCREENSHOTS, "pickups-in-game.png"),
+      canvas._canvas.toBuffer("image/png"),
+    );
+    g.pickups.each((p) => g.pickups.release(p));
+  }
+  g.openChest(1);
+  assert.equal(g.state, "chest");
+  assert.equal(A.ui.root.querySelectorAll(".chest-sprite canvas").length, 3);
+  assert.ok(A.ui.root.querySelectorAll(".chest-rewards .card").length > 0);
+  g.resumeChest();
+  assert.equal(g.state, "playing");
   w.eval(fs.readFileSync(path.join(__dirname, "scenarios.js"), "utf8"));
   for (const map of w.Rexx.data.maps) {
     for (const index of map.enemies) {
@@ -165,6 +371,15 @@ const fs = require("fs"),
   const regression = w.runRexxTests();
   for (const r of regression) assert.ok(r.pass, r.name + " " + r.error);
   const report = {
+    weaponSprites: 15,
+    weaponUiAndProjectiles: true,
+    pickupSprites: 12,
+    chestFramesAndResume: true,
+    scenerySprites: sceneryFrames,
+    sceneryPlacementAndCulling: true,
+    groundTexturesLoaded: groundReady.length,
+    mirroredSeamsMatch: true,
+    missingGroundFallback: true,
     atlasLoaded: true,
     enemyAtlasesLoaded: enemyReady.length,
     enemyAndBossFrames: enemyFrames,

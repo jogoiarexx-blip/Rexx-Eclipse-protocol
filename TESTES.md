@@ -89,3 +89,19 @@ Resultado bruto: `tests/results/sprite-results.json`. Reproduzir com `npm run te
 A suíte `tests/sprite-tests.cjs` passou com as seis novas folhas: 260 retângulos válidos, todas as cinco regiões associadas corretamente, cinco chefes encontrados, transparência e desenho Canvas. Agentes, retratos e os 16 grupos de regressão também passaram.
 
 Resultado: `tests/results/sprite-results-v1.0.2.json`. Uma renderização do campo foi inspecionada visualmente. Ambiente JSDOM + Canvas nativo; não houve teste visual em navegador real ou medição de FPS em hardware de jogador. Os PNGs distribuídos são os originais; o contorno do decoder descrito acima ocorre apenas em memória nos testes.
+
+## Atualização 1.0.3 — pisos
+
+Passaram carregamento das cinco texturas, igualdade de pixels nas bordas horizontais/verticais dos padrões espelhados, desenho de todos os mapas e retorno de fallback para recurso ausente. Os 16 grupos de regressão e testes dos sprites anteriores passaram. Resultado: `tests/results/sprite-results-v1.0.3.json`. Renderizações das cinco regiões foram inspecionadas em Canvas nativo. O teste continua usando JSDOM; não representa uma sessão em navegador real nem medição de FPS.
+
+## Atualização 1.0.4 — decoração regional
+
+Passaram o carregamento da folha, limites dos 20 sprites, distribuição determinística, exclusão das áreas dos retransmissores e desenho apenas das células visíveis. As cinco renderizações com decoração foram inspecionadas. Testes dos pisos, sprites anteriores e 16 grupos de regressão passaram. Resultado em `tests/results/sprite-results-v1.0.4.json`. Ambiente JSDOM + Canvas nativo; validação em navegador real e medição de desempenho em hardware de usuário permanecem pendentes.
+
+## Atualização 1.0.5 — itens e baús
+
+Passaram carregamento dos 12 sprites, seleção das quatro classes de XP, desenho dos seis tipos especiais (incluindo baú), retorno para tipo desconhecido, criação dos três quadros na tela de recompensas e retomada da partida. Os 16 grupos de regressão incluem coleta, efeitos, fila de baús e recompensas. Uma renderização com os dez itens coletáveis foi inspecionada em Canvas nativo. Resultado: `tests/results/sprite-results-v1.0.5.json`. A cadência visual da animação CSS não foi validada em navegador real; a suíte usa JSDOM + Canvas nativo.
+
+## Atualização 1.0.6 — armas
+
+Passaram carregamento e associação dos 15 sprites, desenho Canvas de todas as armas, 15 ícones no arsenal, ícone na opção de upgrade, desenho de discos/arcos e preservação do desenho de projéteis hostis. Os testes anteriores e 16 grupos de regressão passaram. Resultado em `tests/results/sprite-results-v1.0.6.json`. Ambiente JSDOM + Canvas nativo; ainda sem validação visual em navegador real.

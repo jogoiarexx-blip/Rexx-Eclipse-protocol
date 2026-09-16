@@ -124,9 +124,12 @@ Rexx.Engine = class {
     c.strokeStyle = g.map.detail;
     c.lineWidth = 1;
     const cell = 140;
-    for (let x = Math.floor(left / cell) * cell; x < right; x += cell)
-      for (let y = Math.floor(top / cell) * cell; y < bottom; y += cell)
-        this.tile(c, g, x, y, cell);
+    if (!this.app.ground?.draw(c, g.map, left, top, right, bottom)) {
+      for (let x = Math.floor(left / cell) * cell; x < right; x += cell)
+        for (let y = Math.floor(top / cell) * cell; y < bottom; y += cell)
+          this.tile(c, g, x, y, cell);
+    }
+    this.app.scenery?.draw(c, g, left, top, right, bottom);
     c.strokeStyle = g.map.color;
     c.globalAlpha = 0.5;
     c.strokeRect(0, 0, Rexx.C.world, Rexx.C.world);
@@ -195,6 +198,7 @@ Rexx.Engine = class {
     });
     g.pickups.each((p) => {
       if (p.x < left || p.x > right || p.y < top || p.y > bottom) return;
+      if (this.app.pickupSprites?.draw(c, p)) return;
       let colors = {
         xp:
           p.value >= 40
@@ -243,6 +247,7 @@ Rexx.Engine = class {
       this.entity(c, e, g.time);
     });
     g.projectiles.each((p) => {
+      if (this.app.weaponSprites?.projectile(c, p)) return;
       c.fillStyle = p.color;
       c.strokeStyle = p.color;
       c.lineWidth = p.r;
@@ -508,7 +513,8 @@ Rexx.Engine = class {
           c.save();
           c.translate(p.x + Math.cos(a) * r, p.y + Math.sin(a) * r);
           c.rotate(a);
-          c.fillRect(-13, -3, 26, 6);
+          if (!this.app.weaponSprites?.draw(c, "orbital", 0, 0, 36))
+            c.fillRect(-13, -3, 26, 6);
           c.restore();
         }
       }
@@ -526,8 +532,10 @@ Rexx.Engine = class {
           let a = t + j * 2.09,
             x = p.x + Math.cos(a) * 65,
             y = p.y + Math.sin(a) * 65;
-          c.fillRect(x - 8, y - 5, 16, 10);
-          c.strokeRect(x - 13, y - 8, 26, 16);
+          if (!this.app.weaponSprites?.draw(c, "drone", x, y, 36)) {
+            c.fillRect(x - 8, y - 5, 16, 10);
+            c.strokeRect(x - 13, y - 8, 26, 16);
+          }
         }
       }
     }

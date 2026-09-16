@@ -61,10 +61,26 @@ Os limites preservam a continuidade da simulação em picos; disparos e partícu
 
 **Boss:** use ID estável, HP, dano, identidade e tipo em `data/enemies.js`; seus padrões ficam em `entities/boss.js`. Os estágios mudam aos limiares de 65% e 30% de HP.
 
-**Arte:** `js/core/sprites.js` carrega os agentes; `js/core/enemySprites.js` usa `assets/images/enemies/atlas-data.js` para selecionar animações de inimigos por região e dos cinco chefes. Cenário, itens e efeitos são procedurais. Sprites WebP podem substituir `Engine.entity`, `Engine.player` e `Engine.tile` sem alterar a simulação. Pré-carregue recursos locais antes da primeira partida; preserve dimensões de colisão independentes da imagem.
+**Arte:** `js/core/sprites.js` carrega os agentes; `js/core/enemySprites.js` usa `assets/images/enemies/atlas-data.js` para selecionar animações de inimigos por região e dos cinco chefes. Decoração adicional, itens e efeitos são procedurais. Sprites WebP podem substituir `Engine.entity`, `Engine.player` e `Engine.tile` sem alterar a simulação. Pré-carregue recursos locais antes da primeira partida; preserve dimensões de colisão independentes da imagem.
 
 **Áudio:** o sintetizador é funcional e autoral. Para substituir por faixas comprimidas, preserve a interface `init`, `play` e `update`, e as configurações de volume geral, música e efeitos.
 
 ## Evolução do save
 
 Preserve IDs já publicados. Alterações incompatíveis de formato devem ganhar uma migração explícita e um novo número de versão. Não remova o tratamento de erro ou os valores padrão seguros em `Save.load`.
+
+## Pisos — v1.0.3
+
+As cinco regiões agora usam texturas PNG próprias em `assets/images/ground/`. O módulo `js/core/ground.js` prepara um padrão espelhado em cache por região e desenha o piso antes dos objetivos, perigos e entidades. Se a imagem falhar, o piso procedural continua disponível. Abra `assets/images/ground/preview.html` para consultar os pisos. Detalhes e prompts nessa mesma pasta.
+
+## Decoração regional — v1.0.4
+
+20 sprites de cenário foram integrados, quatro por mapa. Fontes, atlas, prompt e galeria em `assets/images/scenery/`. `js/core/scenery.js` desenha apenas as células próximas à câmera, com distribuição estável e cache por partida. São objetos decorativos atravessáveis; áreas iniciais e retransmissores ficam livres. Itens, armas e efeitos continuam procedurais. A prévia dos pisos agora permite ligar e desligar a decoração.
+
+## Itens e baús — v1.0.5
+
+Os itens coletáveis agora usam 12 sprites em `assets/images/pickups/`: quatro classes de XP, cinco consumíveis e três estados do baú. O módulo `js/core/pickupSprites.js` renderiza os itens e a sequência de abertura; `css/pickups.css` controla a animação e respeita movimento reduzido. Galeria e prompt na mesma pasta. Armas e efeitos de combate continuam procedurais.
+
+## Arsenal visual — v1.0.6
+
+15 sprites de armas-base integrados ao arsenal, HUD e escolhas de upgrade. Lâminas orbitais, drones, discos de íon e arcos de retorno também usam sprites no combate. Arquivos, atlas, galeria e prompt em `assets/images/weapons/`; renderizador em `js/core/weaponSprites.js`. Evoluções compartilham a arte-base; feixes, áreas e demais efeitos continuam procedurais.

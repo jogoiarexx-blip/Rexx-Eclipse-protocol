@@ -1,0 +1,65 @@
+.chest-sprite {
+  position: relative;
+  width: 240px;
+  height: 175px;
+  margin: 0 auto 16px;
+  filter: drop-shadow(0 0 14px #ffce7544);
+}
+.chest-sprite canvas {
+  position: absolute;
+  inset: 0;
+  width: 240px;
+  height: 175px;
+}
+.chest-sprite canvas:nth-child(1) {
+  animation: cache-closed 0.9s steps(1, end) both;
+}
+.chest-sprite canvas:nth-child(2) {
+  animation: cache-half 0.9s steps(1, end) both;
+}
+.chest-sprite canvas:nth-child(3) {
+  animation: cache-open 0.9s steps(1, end) both;
+}
+@keyframes cache-closed {
+  0%,
+  32% {
+    opacity: 1;
+  }
+  33%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes cache-half {
+  0%,
+  32% {
+    opacity: 0;
+  }
+  33%,
+  65% {
+    opacity: 1;
+  }
+  66%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes cache-open {
+  0%,
+  65% {
+    opacity: 0;
+  }
+  66%,
+  100% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chest-sprite canvas {
+    animation: none !important;
+    opacity: 0;
+  }
+  .chest-sprite canvas:nth-child(3) {
+    opacity: 1;
+  }
+}

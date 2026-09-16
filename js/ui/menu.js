@@ -239,7 +239,7 @@ Rexx.UI = class {
         p = Rexx.data.passives.find((p) => p.id === w.passive);
       this.card(
         b.querySelector(".weapons"),
-        `<span class="item-icon" style="color:${w.color}">${w.icon}</span><span class="micro">${unlocked ? "NÍVEIS 1–8" : w.unlock + " ELIMINAÇÕES PARA LIBERAR"}</span><h3>${w.name}</h3><p>${w.desc}</p><small>Dano base ${w.damage} · Intervalo ${w.cooldown}s<br>Cada nível: +23% dano base, +3,5% cadência, +4% área.<br>Projéteis extras nos níveis 4 e 7.</small><div class="recipe"><span>${w.name} VIII + ${p.name}</span><h4>${discovered ? "✺ " : "◇ "}${w.evolution}</h4><small>${w.evoDesc}<br>${discovered ? "Combinação descoberta" : "Combinação ainda não descoberta"}</small></div>`,
+        `<span class="item-icon" style="color:${w.color}">${this.app.weaponSprites.icon(w.id)}</span><span class="micro">${unlocked ? "NÍVEIS 1–8" : w.unlock + " ELIMINAÇÕES PARA LIBERAR"}</span><h3>${w.name}</h3><p>${w.desc}</p><small>Dano base ${w.damage} · Intervalo ${w.cooldown}s<br>Cada nível: +23% dano base, +3,5% cadência, +4% área.<br>Projéteis extras nos níveis 4 e 7.</small><div class="recipe"><span>${w.name} VIII + ${p.name}</span><h4>${discovered ? "✺ " : "◇ "}${w.evolution}</h4><small>${w.evoDesc}<br>${discovered ? "Combinação descoberta" : "Combinação ainda não descoberta"}</small></div>`,
         unlocked ? "" : "locked",
       );
     }

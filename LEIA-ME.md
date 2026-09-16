@@ -1,4 +1,4 @@
-# REXX: ECLIPSE PROTOCOL — v1.0.2
+# REXX: ECLIPSE PROTOCOL — v1.0.6
 
 Survivor / bullet heaven original em HTML5, CSS e JavaScript, com Canvas 2D. Todo o jogo roda no cliente, sem backend, conta, API, anúncio ou download de assets em tempo de execução.
 
@@ -51,7 +51,7 @@ Os três retransmissores azuis no radar são objetivos opcionais: fique perto de
 - HUD, radar, pausa, level up, animação de baú, vitória e derrota.
 - Música e efeitos originais sintetizados por Web Audio, com controles de volume separados.
 
-Os seis agentes, os inimigos das cinco regiões e os cinco chefes usam sprites PNG animados originais. Cenário, itens, armas e efeitos continuam procedurais, feitos com Canvas e CSS. Abra assets/images/enemies/preview.html para consultar as novas folhas animadas. Veja SPRITES.md para o estado exato da atualização. A trilha sintetizada evita arquivos grandes e dependências de codecs. As pastas de assets documentam onde acrescentar WebP, spritesheets ou faixas de áudio futuramente; a versão entregue não depende dessas substituições.
+Os seis agentes, os inimigos das cinco regiões e os cinco chefes usam sprites PNG animados originais. Decoração adicional, itens, armas e efeitos continuam procedurais, feitos com Canvas e CSS. Abra assets/images/enemies/preview.html para consultar as novas folhas animadas. Veja SPRITES.md para o estado exato da atualização. A trilha sintetizada evita arquivos grandes e dependências de codecs. As pastas de assets documentam onde acrescentar WebP, spritesheets ou faixas de áudio futuramente; a versão entregue não depende dessas substituições.
 
 ## Desbloqueios
 
@@ -88,3 +88,19 @@ A inspeção interativa final em navegador real ficou impedida pelo ambiente de 
 ## Desenvolvimento
 
 Leia **ARQUITETURA.md** para os pontos de extensão. Não é preciso instalar as dependências de desenvolvimento para jogar. Para executar os testes opcionais, instale as dependências listadas em `package.json`.
+
+## Pisos — v1.0.6
+
+As cinco regiões agora usam texturas PNG próprias em `assets/images/ground/`. O módulo `js/core/ground.js` prepara um padrão espelhado em cache por região e desenha o piso antes dos objetivos, perigos e entidades. Se a imagem falhar, o piso procedural continua disponível. Abra `assets/images/ground/preview.html` para consultar os pisos. Detalhes e prompts nessa mesma pasta.
+
+## Decoração regional — v1.0.6
+
+20 sprites de cenário foram integrados, quatro por mapa. Fontes, atlas, prompt e galeria em `assets/images/scenery/`. `js/core/scenery.js` desenha apenas as células próximas à câmera, com distribuição estável e cache por partida. São objetos decorativos atravessáveis; áreas iniciais e retransmissores ficam livres. Itens, armas e efeitos continuam procedurais. A prévia dos pisos agora permite ligar e desligar a decoração.
+
+## Itens e baús — v1.0.6
+
+Os itens coletáveis agora usam 12 sprites em `assets/images/pickups/`: quatro classes de XP, cinco consumíveis e três estados do baú. O módulo `js/core/pickupSprites.js` renderiza os itens e a sequência de abertura; `css/pickups.css` controla a animação e respeita movimento reduzido. Galeria e prompt na mesma pasta. Armas e efeitos de combate continuam procedurais.
+
+## Arsenal visual — v1.0.6
+
+15 sprites de armas-base integrados ao arsenal, HUD e escolhas de upgrade. Lâminas orbitais, drones, discos de íon e arcos de retorno também usam sprites no combate. Arquivos, atlas, galeria e prompt em `assets/images/weapons/`; renderizador em `js/core/weaponSprites.js`. Evoluções compartilham a arte-base; feixes, áreas e demais efeitos continuam procedurais.
