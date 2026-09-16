@@ -98,7 +98,7 @@
   );
   Rexx.data.achievements = a;
   Rexx.Achievements = {
-    check(app) {
+    check(app, currencyMultiplier = 1) {
       const fresh = [];
       for (const a of Rexx.data.achievements)
         if (
@@ -106,8 +106,9 @@
           a.value(app.save.stats) >= a.target
         ) {
           app.save.achievements.push(a.id);
-          app.save.coins += a.reward;
-          fresh.push(a);
+          const reward = Math.floor(a.reward * currencyMultiplier);
+          app.save.coins += reward;
+          fresh.push({ ...a, reward });
         }
       return fresh;
     },

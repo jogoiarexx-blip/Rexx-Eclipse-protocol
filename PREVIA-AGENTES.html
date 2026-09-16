@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>REXX · Direções e animação</title>
+  <style>
+    body {
+      background: #08151c;
+      color: #d8eee9;
+      font: 16px system-ui;
+      margin: 24px;
+    }
+    main {
+      max-width: 1000px;
+      margin: auto;
+    }
+    select,
+    button,
+    a {
+      background: #18333e;
+      color: #adf4da;
+      border: 1px solid #42656c;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    canvas {
+      width: 100%;
+      max-width: 960px;
+      background: #172c32;
+      border: 1px solid #42656c;
+      display: block;
+      margin: 20px 0;
+    }
+    #directions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      font-size: 26px;
+    }
+    p {
+      color: #a9c9ce;
+    }
+    a {
+      display: inline-block;
+    }
+  </style>
+  <main>
+    <h1>Agentes · oito direções</h1>
+    <p>
+      Escolha o agente e movimente com WASD ou setas. Ao soltar, ele mantém a
+      orientação. Os botões permitem conferir cada direção.
+    </p>
+    <label
+      >Agente
+      <select id="agent"></select
+    ></label>
+    <label><input id="auto" type="checkbox" /> Caminhada automática</label
+    ><canvas id="preview" width="960" height="500"></canvas>
+    <div id="directions"></div>
+    <p id="status">Carregando WebP…</p>
+    <a href="index.html">Abrir jogo</a>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/data/characters.js"></script>
+  <script src="assets/images/agents/atlas-data.js"></script>
+  <script src="js/core/sprites.js"></script>
+  <script>
+    const select = document.getElementById("agent"),
+      auto = document.getElementById("auto"),
+      canvas = document.getElementById("preview"),
+      ctx = canvas.getContext("2d"),
+      status = document.getElementById("status"),
+      sprites = new Rexx.Sprites(),
+      keys = new Set(),
+      names = [
+        "Leste",
+        "Sudeste",
+        "Sul",
+        "Sudoeste",
+        "Oeste",
+        "Noroeste",
+        "Norte",
+        "Nordeste",
+      ];
+    const p = {
+      character: Rexx.data.characters[0],
+      angle: Math.PI / 2,
+      x: 480,
+      y: 250,
+      moving: false,
+      walkTime: 0,
+      animationTime: 0,
+    };
+    for (const c of Rexx.data.characters) {
+      const o = document.createElement("option");
+      o.value = c.id;
+      o.textContent = c.name;
+      select.append(o);
+    }
+    select.onchange = () =>
+      (p.character = Rexx.data.characters.find((c) => c.id === select.value));
+    names.forEach((name, i) => {
+      const b = document.createElement("button");
+      b.textContent = name;
+      b.onclick = () => (p.angle = (i * Math.PI) / 4);
+      document.getElementById("directions").append(b);
+    });
+    window.addEventListener("keydown", (e) => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key))
+        e.preventDefault();
+      keys.add(e.key.toLowerCase());
+    });
+    window.addEventListener("keyup", (e) => keys.delete(e.key.toLowerCase()));
+    window.addEventListener("blur", () => keys.clear());
+    let last = 0;
+    function frame(t) {
+      const dt = Math.min(0.05, (t - last) / 1000 || 0);
+      last = t;
+      let dx =
+          Number(keys.has("d") || keys.has("arrowright")) -
+          Number(keys.has("a") || keys.has("arrowleft")),
+        dy =
+          Number(keys.has("s") || keys.has("arrowdown")) -
+          Number(keys.has("w") || keys.has("arrowup"));
+      const n = Math.max(1, Math.hypot(dx, dy));
+      dx /= n;
+      dy /= n;
+      p.moving = !!(dx || dy || auto.checked);
+      p.walkTime = p.moving ? p.walkTime + dt : 0;
+      p.animationTime += dt;
+      if (dx || dy) p.angle = Math.atan2(dy, dx);
+      p.x = Math.max(35, Math.min(925, p.x + dx * 170 * dt));
+      p.y = Math.max(50, Math.min(450, p.y + dy * 170 * dt));
+      ctx.clearRect(0, 0, 960, 500);
+      ctx.strokeStyle = "#28434c";
+      for (let x = 0; x < 960; x += 80) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 500);
+        ctx.stroke();
+      }
+      for (let y = 0; y < 500; y += 80) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(960, y);
+        ctx.stroke();
+      }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.fillStyle = "#0006";
+      ctx.beginPath();
+      ctx.ellipse(0, 26, 19, 6, 0, 0, 7);
+      ctx.fill();
+      sprites.drawAgent(ctx, p);
+      ctx.restore();
+      status.textContent =
+        (sprites.directionReady ? "WebP carregado" : "Carregando") +
+        " · " +
+        names[sprites.direction(p)] +
+        " · " +
+        (p.moving ? "caminhando" : "parado");
+      requestAnimationFrame(frame);
+    }
+    sprites.loaded.then((ok) => {
+      if (ok) requestAnimationFrame(frame);
+      else status.textContent = "Não foi possível carregar os sprites.";
+    });
+  </script>
+</html>

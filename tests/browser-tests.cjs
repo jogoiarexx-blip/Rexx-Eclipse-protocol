@@ -19,7 +19,24 @@ const assert = require("assert/strict");
   });
   await page.goto(pathToFileURL(path.join(__dirname, "../index.html")).href);
   await page.addScriptTag({ path: path.join(__dirname, "scenarios.js") });
-  const report = await page.evaluate(() => window.runRexxTests());
+  await page.addScriptTag({
+    path: path.join(__dirname, "balance-scenarios.js"),
+  });
+  await page.evaluate(async () => {
+    const a = Rexx.app;
+    await Promise.all([
+      a.sprites.loaded,
+      a.enemySprites.loaded,
+      a.ground.loaded,
+      a.scenery.loaded,
+      a.pickupSprites.loaded,
+      a.weaponSprites.loaded,
+    ]);
+  });
+  const report = await page.evaluate(() => [
+    ...window.runRexxTests(),
+    ...window.runBalanceTests(),
+  ]);
   for (const r of report)
     console.log(
       (r.pass ? "PASS " : "FAIL ") + r.name + (r.error ? "\n" + r.error : ""),
@@ -70,6 +87,11 @@ const assert = require("assert/strict");
     await page.screenshot({
       path: path.join(process.env.SCREENSHOTS, "gameplay.png"),
     });
+  if (process.env.REPORT_PATH)
+    require("fs").writeFileSync(
+      process.env.REPORT_PATH,
+      JSON.stringify({ report, errors }, null, 2),
+    );
   await browser.close();
   assert.equal(errors.length, 0);
   assert.ok(

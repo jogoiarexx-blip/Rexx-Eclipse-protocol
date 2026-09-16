@@ -9,7 +9,9 @@ Rexx.UI.prototype.result = function (win) {
       win ? "ECLIPSE CONTIDO" : "O Core lembra de você.",
       win
         ? "A entidade caiu. Esta realidade tem um amanhã."
-        : "Toda tentativa deixa energia para a próxima missão.",
+        : g.difficulty.id === "easy"
+          ? "Modo Fácil: nenhuma moeda permanente concedida."
+          : "Toda tentativa deixa energia para a próxima missão.",
     );
   b.innerHTML = `<div class="result-grid">${Object.entries({
     Sobrevivência: Rexx.util.time(g.time),
@@ -48,4 +50,36 @@ Rexx.UI.prototype.result = function (win) {
     this.button("MENU PRINCIPAL", () => this.menu()),
   );
   b.append(actions);
+};
+
+Rexx.UI.prototype.demonResult = function () {
+  this.screen = "demonResult";
+  this.hudRoot.classList.add("hidden");
+  const g = this.app.game;
+  const b = this.modal(
+    "A FENDA ESTÁ RINDO",
+    "VOCÊ É UM NOOB!",
+    "Volte e tente em uma dificuldade maior.",
+  );
+  this.root.classList.add("demon-result");
+  const info = document.createElement("p");
+  info.textContent = `Tempo: ${Rexx.util.time(g.time)} · Nível ${g.player.level} · Moedas permanentes: 0`;
+  const actions = document.createElement("div");
+  actions.className = "result-actions";
+  actions.append(
+    this.button(
+      "Tentar novamente",
+      () => this.app.start(g.player.character.id, g.map.id, "easy"),
+      "primary",
+    ),
+    this.button("Selecionar dificuldade", () => {
+      this.selectedCharacter = g.player.character.id;
+      this.selectedMap = g.map.id;
+      this.selectedDifficulty = 1;
+      this.app.game = null;
+      this.select();
+    }),
+    this.button("Menu principal", () => this.menu()),
+  );
+  b.append(info, actions);
 };

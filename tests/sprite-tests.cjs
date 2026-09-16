@@ -3,6 +3,10 @@ const { createCanvas, Image } = require("@napi-rs/canvas");
 const fs = require("fs"),
   path = require("path"),
   assert = require("assert/strict");
+const watchdog = setTimeout(() => {
+  console.error("Timed out waiting for asset loading or tests");
+  process.exit(1);
+}, 15000);
 (async () => {
   const root = path.resolve(__dirname, ".."),
     html = fs.readFileSync(path.join(root, "index.html"), "utf8");
@@ -11,6 +15,9 @@ const fs = require("fs"),
       url: "https://rexx-sprites.test/",
     }),
     w = dom.window;
+  const consoleErrors = [];
+  w.addEventListener("error", (event) => consoleErrors.push(event.message));
+  w.console.error = (...args) => consoleErrors.push(args.join(" "));
   w.innerWidth = 1280;
   w.innerHeight = 720;
   w.devicePixelRatio = 1;
@@ -18,19 +25,7 @@ const fs = require("fs"),
   w.navigator.getGamepads = () => [];
   w.Image = class extends Image {
     set src(value) {
-      // Native test decoder misidentifies embedded SVG provenance thumbnails.
-      // Ignore ancillary metadata only in this in-memory test decode. The
-      // distributed PNG and its pixel data/provenance remain unchanged.
-      const png = fs.readFileSync(path.join(root, value));
-      const parts = [png.subarray(0, 8)];
-      for (let offset = 8; offset < png.length;) {
-        const length = png.readUInt32BE(offset),
-          type = png.toString("ascii", offset + 4, offset + 8);
-        if (["IHDR", "IDAT", "IEND", "PLTE", "tRNS"].includes(type))
-          parts.push(png.subarray(offset, offset + length + 12));
-        offset += length + 12;
-      }
-      super.src = Buffer.concat(parts);
+      super.src = fs.readFileSync(path.join(root, value));
     }
   };
   w.HTMLCanvasElement.prototype.getContext = function () {
@@ -238,6 +233,82 @@ const fs = require("fs"),
     );
     assert.ok(visible > 0 && visible < total, "Only visible cells are drawn");
   }
+  const directions = [
+    ["d"],
+    ["d", "s"],
+    ["s"],
+    ["a", "s"],
+    ["a"],
+    ["a", "w"],
+    ["w"],
+    ["d", "w"],
+  ];
+  for (let i = 0; i < directions.length; i++) {
+    A.input.keys.clear();
+    directions[i].forEach((key) => A.input.keys.add(key));
+    p.update(g, 0.016);
+    assert.equal(
+      A.sprites.direction(p),
+      i,
+      "Eight-way facing follows movement",
+    );
+    A.input.keys.clear();
+    p.update(g, 0.016);
+    assert.equal(A.sprites.direction(p), i, "Facing persists while idle");
+  }
+  w.navigator.getGamepads = () => [{ axes: [-1, -1], buttons: [] }];
+  p.update(g, 0.016);
+  assert.equal(A.sprites.direction(p), 5, "Gamepad northwest direction");
+  w.navigator.getGamepads = () => [];
+  p.angle = Math.PI / 2;
+  const atlas = A.sprites.directionAtlas;
+  assert.equal(Object.keys(atlas.characters).length, 6);
+  for (const [id, animation] of Object.entries(atlas.characters)) {
+    assert.equal(animation.frames.length, 8);
+    for (let i = 0; i < 8; i++) {
+      const f = animation.frames[i];
+      assert.ok(
+        f.x >= 0 &&
+          f.y >= 0 &&
+          f.x + f.w <= atlas.width &&
+          f.y + f.h <= atlas.height,
+      );
+      const c = createCanvas(96, 96).getContext("2d");
+      c.translate(48, 48);
+      assert.equal(
+        A.sprites.drawAgent(c, {
+          character: { id },
+          angle: (i * Math.PI) / 4,
+          moving: true,
+          walkTime: 0.2,
+        }),
+        true,
+      );
+    }
+  }
+  if (process.env.SCREENSHOTS) {
+    const sheet = createCanvas(800, 660),
+      c = sheet.getContext("2d");
+    c.fillStyle = "#142631";
+    c.fillRect(0, 0, 800, 660);
+    Object.keys(atlas.characters).forEach((id, row) => {
+      for (let i = 0; i < 8; i++) {
+        c.save();
+        c.translate(50 + i * 100, 50 + row * 110);
+        A.sprites.drawAgent(c, {
+          character: { id },
+          angle: (i * Math.PI) / 4,
+          moving: true,
+          walkTime: 0.1,
+        });
+        c.restore();
+      }
+    });
+    fs.writeFileSync(
+      path.join(process.env.SCREENSHOTS, "agents-eight-directions.webp"),
+      sheet.toBuffer("image/webp"),
+    );
+  }
   let captures = [];
   for (const [id, row] of Object.entries(A.sprites.rows)) {
     p.character = w.Rexx.data.characters.find((c) => c.id === id);
@@ -248,7 +319,7 @@ const fs = require("fs"),
         cc = c.getContext("2d");
       cc.translate(48, 48);
       assert.equal(A.sprites.drawAgent(cc, p), true);
-      captures.push(c.toBuffer("image/png"));
+      captures.push(c.toBuffer("image/webp"));
     }
   }
   for (let r = 0; r < 6; r++)
@@ -290,7 +361,7 @@ const fs = require("fs"),
   if (process.env.SCREENSHOTS)
     fs.writeFileSync(
       path.join(process.env.SCREENSHOTS, "sprites-in-game.png"),
-      canvas._canvas.toBuffer("image/png"),
+      canvas._canvas.toBuffer("image/webp"),
     );
   if (process.env.SCREENSHOTS) {
     const originalMap = g.map;
@@ -299,7 +370,7 @@ const fs = require("fs"),
       A.engine.draw(g);
       fs.writeFileSync(
         path.join(process.env.SCREENSHOTS, "ground-" + map.id + ".png"),
-        canvas._canvas.toBuffer("image/png"),
+        canvas._canvas.toBuffer("image/webp"),
       );
     }
     g.map = originalMap;
@@ -328,7 +399,7 @@ const fs = require("fs"),
     A.engine.draw(g);
     fs.writeFileSync(
       path.join(process.env.SCREENSHOTS, "pickups-in-game.png"),
-      canvas._canvas.toBuffer("image/png"),
+      canvas._canvas.toBuffer("image/webp"),
     );
     g.pickups.each((p) => g.pickups.release(p));
   }
@@ -370,7 +441,24 @@ const fs = require("fs"),
   }
   const regression = w.runRexxTests();
   for (const r of regression) assert.ok(r.pass, r.name + " " + r.error);
+  w.eval(fs.readFileSync(path.join(__dirname, "balance-scenarios.js"), "utf8"));
+  w.captureBalance = (name) => {
+    if (process.env.SCREENSHOTS)
+      fs.writeFileSync(
+        path.join(process.env.SCREENSHOTS, name + ".webp"),
+        canvas._canvas.toBuffer("image/webp"),
+      );
+  };
+  const balance = w.runBalanceTests();
+  for (const result of balance)
+    assert.ok(result.pass, result.name + " " + result.error);
+  assert.equal(consoleErrors.length, 0, consoleErrors.join("\n"));
   const report = {
+    consoleErrors: consoleErrors.length,
+    balanceGroups: balance.length,
+    directionalAgentSprites: 48,
+    eightWayMovementAndIdle: true,
+    webpDecoded: true,
     weaponSprites: 15,
     weaponUiAndProjectiles: true,
     pickupSprites: 12,
@@ -396,8 +484,10 @@ const fs = require("fs"),
   console.log(JSON.stringify(report, null, 2));
   if (process.env.REPORT_PATH)
     fs.writeFileSync(process.env.REPORT_PATH, JSON.stringify(report, null, 2));
+  clearTimeout(watchdog);
   dom.window.close();
 })().catch((e) => {
+  clearTimeout(watchdog);
   console.error(e);
   process.exit(1);
 });

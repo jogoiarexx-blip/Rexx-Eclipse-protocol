@@ -33,6 +33,16 @@ Rexx.Audio = class {
     o.stop(t + d + 0.02);
   }
   play(id) {
+    if (id === "threat") {
+      this.tone(48, 0.9, "sawtooth", 0.13);
+      this.tone(73, 0.7, "triangle", 0.1);
+      return;
+    }
+    if (id === "demonLaugh") {
+      this.tone(95, 0.28, "sawtooth", 0.12);
+      this.tone(130, 0.65, "triangle", 0.11);
+      return;
+    }
     let f =
       {
         shot: 520,

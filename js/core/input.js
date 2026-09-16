@@ -15,7 +15,12 @@ Rexx.Input = class {
     );
     window.addEventListener("blur", () => {
       this.keys.clear();
-      if (Rexx.app?.game?.state === "playing") onPause();
+      if (
+        ["playing", "portal", "demonDeath", "demonVictory"].includes(
+          Rexx.app?.game?.state,
+        )
+      )
+        onPause();
     });
   }
   axis() {

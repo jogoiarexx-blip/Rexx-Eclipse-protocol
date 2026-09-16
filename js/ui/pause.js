@@ -11,7 +11,7 @@ Rexx.UI.prototype.pause = function () {
     this.button(
       "CONTINUAR",
       () => {
-        g.state = "playing";
+        g.state = g.resumeState || "playing";
         this.hide();
       },
       "primary",

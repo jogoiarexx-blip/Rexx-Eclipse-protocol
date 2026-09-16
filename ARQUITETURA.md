@@ -1,3 +1,5 @@
+> Atualização vigente: v1.1.0. Imagens raster convertidas para WebP; PNGs e rascunhos não acompanham o pacote. Agentes agora usam oito poses direcionais com animação JavaScript. Consulte ATUALIZACAO-1.1.0.md na raiz. As seções anteriores abaixo são históricas.
+
 # Arquitetura
 
 ## Carregamento e responsabilidades
@@ -84,3 +86,7 @@ Os itens coletáveis agora usam 12 sprites em `assets/images/pickups/`: quatro c
 ## Arsenal visual — v1.0.6
 
 15 sprites de armas-base integrados ao arsenal, HUD e escolhas de upgrade. Lâminas orbitais, drones, discos de íon e arcos de retorno também usam sprites no combate. Arquivos, atlas, galeria e prompt em `assets/images/weapons/`; renderizador em `js/core/weaponSprites.js`. Evoluções compartilham a arte-base; feixes, áreas e demais efeitos continuam procedurais.
+
+## Balanceamento 1.2.0
+
+`js/data/difficulties.js` centraliza dificuldades, marcos de encontro e atributos do demônio. `js/systems/easyFinale.js` controla portal, perseguição e sequências de desfecho; `js/entities/demon.js` controla perseguição determinística e desenho dos seis estados. `Game.addCoins` é o ponto de concessão de moedas em partida, e `finish` aplica o multiplicador permanente também às recompensas finais/conquistas. O cronograma foi ajustado no diretor existente, mantendo armas, XP e pool.

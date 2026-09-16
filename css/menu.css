@@ -383,7 +383,7 @@ h1 span {
   flex: none;
   width: 80px;
   height: 80px;
-  background-image: url("../assets/images/zone-zero/agents-walk.png");
+  background-image: url("../assets/images/zone-zero/agents-walk.webp");
   background-size: 320px 480px;
   background-position: 0 calc(var(--row) * -80px);
   background-repeat: no-repeat;
@@ -395,3 +395,8 @@ h1 span {
   background-size: 512px 768px;
   background-position: 0 calc(var(--row) * -128px);
 }
+
+.difficulty-info { color: #ffdda2; padding: 12px; border-left: 3px solid #e6b95e; background: #172530; }
+.demon-result { background: #12051044; align-items: end; padding-bottom: 4vh; }
+.demon-result .modal { border-color: #e95978; background: #180b20e8; }
+.demon-result h2 { color: #ff91a6; }

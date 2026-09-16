@@ -65,33 +65,3 @@ Rexx.data.maps = [
     desc: "Realidade desfeita. Fendas instáveis distorcem o campo de batalha.",
   },
 ];
-Rexx.data.difficulties = [
-  { name: "Normal", hp: 1, speed: 1, damage: 1, count: 1, reward: 1, wins: 0 },
-  {
-    name: "Difícil",
-    hp: 1.35,
-    speed: 1.08,
-    damage: 1.25,
-    count: 1.12,
-    reward: 1.5,
-    wins: 1,
-  },
-  {
-    name: "Pesadelo",
-    hp: 1.8,
-    speed: 1.16,
-    damage: 1.6,
-    count: 1.25,
-    reward: 2.2,
-    wins: 3,
-  },
-  {
-    name: "Eclipse",
-    hp: 2.4,
-    speed: 1.24,
-    damage: 2,
-    count: 1.4,
-    reward: 3,
-    wins: 5,
-  },
-];

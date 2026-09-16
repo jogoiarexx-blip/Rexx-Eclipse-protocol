@@ -8,6 +8,7 @@ Rexx.Director = class {
     this.fired = new Set();
   }
   update(dt) {
+    if (this.g.bossFinalDefeated) return;
     const g = this.g,
       t = g.time;
     this.spawn -= dt;
@@ -56,22 +57,35 @@ Rexx.Director = class {
       this.hazard = Math.max(6, 18 - chapter);
       this.environment(chapter);
     }
-    for (const when of [600, 900, 1200, 1800])
-      if (t >= when && !this.fired.has(when)) {
-        this.fired.add(when);
-        if (when === 900) {
-          for (let i = 0; i < 4; i++) this.around(g.map.enemies.at(-2), true);
-          g.alert("CAÇADA DAS QUATRO FENDAS");
-        } else
-          Rexx.Boss.spawn(
-            g,
-            when === 1800
-              ? g.map.boss
-              : (g.map.boss + (when === 1200 ? 1 : 0)) % 5,
-            when === 1800,
-          );
+    if (t >= Rexx.ENCOUNTERS.miniAt && !this.fired.has(600)) {
+      this.fired.add(600);
+      this.mini = Rexx.Boss.spawn(g, g.map.boss, false);
+      if (this.mini) {
+        this.mini.tenMinuteMini = true;
+        this.miniHP = this.mini.maxHP;
       }
+    }
+    if (t >= Rexx.ENCOUNTERS.finalAt && !this.fired.has(900)) {
+      this.fired.add(900);
+      // Retire the earlier encounter without loot so the finale has exactly three bosses.
+      g.enemies.each((e) => {
+        if (e.tenMinuteMini) g.enemies.release(e);
+      });
+      const cx = Rexx.util.clamp(g.player.x, 500, Rexx.C.world - 500);
+      const cy = Rexx.util.clamp(g.player.y, 500, Rexx.C.world - 500);
+      for (let i = 0; i < 1 + Rexx.ENCOUNTERS.escortCount; i++) {
+        const angle = (i * Math.PI * 2) / (1 + Rexx.ENCOUNTERS.escortCount);
+        Rexx.Boss.spawn(g, g.map.boss, i === 0, {
+          escort: i > 0,
+          hp: i > 0 ? this.miniHP : undefined,
+          x: cx + Math.cos(angle) * 400,
+          y: cy + Math.sin(angle) * 400,
+        });
+      }
+      g.alert("BATALHA FINAL · ENTIDADE + 2 MINICHEFES", 5);
+    }
   }
+
   environment(chapter) {
     const g = this.g,
       p = g.player,

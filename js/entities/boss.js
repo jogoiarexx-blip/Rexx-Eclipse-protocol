@@ -1,5 +1,5 @@
 Rexx.Boss = {
-  spawn(g, index, final = false) {
+  spawn(g, index, final = false, options = {}) {
     let e = g.enemies.get();
     if (!e) {
       const expendable = g.enemies.items.find((x) => x.active && !x.boss);
@@ -9,8 +9,8 @@ Rexx.Boss = {
     if (!e) return null;
     const d = Rexx.data.bosses[index];
     Object.assign(e, {
-      x: g.player.x + 450,
-      y: g.player.y - 220,
+      x: options.x ?? Rexx.util.clamp(g.player.x + 450, 60, Rexx.C.world - 60),
+      y: options.y ?? Rexx.util.clamp(g.player.y - 220, 60, Rexx.C.world - 60),
       r: 54,
       hp:
         d.hp *
@@ -22,6 +22,9 @@ Rexx.Boss = {
       speed: 45,
       damage: d.damage * g.difficulty.damage,
       boss: true,
+      demon: false,
+      escort: !!options.escort,
+      tenMinuteMini: false,
       shield: 0,
       elite: true,
       final,
@@ -37,6 +40,7 @@ Rexx.Boss = {
       vy: 0,
       charge: 0,
     });
+    if (options.hp !== undefined) e.hp = options.hp;
     e.maxHP = e.hp;
     g.app.save.discoveries[d.id] ??= 0;
     g.camera.event = 4;

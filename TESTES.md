@@ -105,3 +105,17 @@ Passaram carregamento dos 12 sprites, seleção das quatro classes de XP, desenh
 ## Atualização 1.0.6 — armas
 
 Passaram carregamento e associação dos 15 sprites, desenho Canvas de todas as armas, 15 ícones no arsenal, ícone na opção de upgrade, desenho de discos/arcos e preservação do desenho de projéteis hostis. Os testes anteriores e 16 grupos de regressão passaram. Resultado em `tests/results/sprite-results-v1.0.6.json`. Ambiente JSDOM + Canvas nativo; ainda sem validação visual em navegador real.
+
+## Atualização 1.1.0 — WebP e direções
+
+16 arquivos WebP decodificados; tamanhos e transparência conferidos contra as fontes. Testados os 48 retângulos direcionais, oito combinações de teclado, retenção da orientação parado e direção noroeste com gamepad simulado. Renderizações das 48 poses inspecionadas. Testes de sprites, menus, efeitos e 16 grupos de regressão passaram. A suíte tem timeout explícito para evitar passar silenciosamente caso um carregamento não termine.
+
+Relatório: `tests/results/sprite-results-v1.1.0.json`. Ambiente JSDOM + Canvas nativo, sem validação em navegador real. A otimização comprovada é de tamanho de arquivo; desempenho em FPS não foi aferido.
+
+## Balanceamento 1.2.0
+
+16 novos grupos em `tests/balance-scenarios.js`, executados juntamente com as 16 regressões e validação de assets. Passaram: 10:00/15:00, dois acompanhantes, repetição dos marcos, pool cheio, recompensas não duplicadas, todas as fontes de moeda no Fácil, XP/upgrades, portal condicionado e atrasado, HP 1000, dano 100 ignorando mitigação, perseguição e velocidade, limite por impacto, seis estados de animação, morte especial/textos/botões, vitória real, ausência do evento nas outras dificuldades, pausa/reinício e save legado. Zero erros capturados. Relatório `tests/results/sprite-results-v1.2.0.json` (JSDOM + Canvas nativo). As imagens de portal, perseguição e risada foram inspecionadas.
+
+`tests/browser-tests.cjs` também inclui os novos casos e espera o carregamento dos WebP para uma futura reprodução em Chromium real.
+
+A tentativa de instalar o Chromium headless neste ambiente não concluiu: o download expirou. Por isso, os resultados desta entrega não devem ser interpretados como validação em navegador real.

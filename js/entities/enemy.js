@@ -17,6 +17,10 @@ Rexx.Enemy = {
       damage: d.damage * g.difficulty.damage * (elite ? 1.35 : 1),
       elite,
       boss: false,
+      final: false,
+      demon: false,
+      escort: false,
+      tenMinuteMini: false,
       uid: ++g.uid,
       timer: Rexx.util.rand(1, 3),
       phase: 0,
@@ -34,6 +38,10 @@ Rexx.Enemy = {
   },
   update(g, e, dt) {
     if (!e.active) return;
+    if (e.demon) {
+      Rexx.Demon.update(g, e, dt);
+      return;
+    }
     e.flash = Math.max(0, e.flash - dt);
     for (const k in e.status) {
       e.status[k] -= dt;

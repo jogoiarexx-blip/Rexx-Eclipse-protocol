@@ -1,4 +1,8 @@
-# REXX: ECLIPSE PROTOCOL — v1.0.6
+# REXX: ECLIPSE PROTOCOL — v1.2.0
+
+**Balanceamento atual:** minichefe aos 10:00; chefe + dois minichefes aos 15:00. Fácil não concede moedas permanentes e possui o evento secreto do demônio. Detalhes em `ATUALIZACAO-1.2.0.md`.
+
+**Assets preservados:** todos os sprites raster em WebP; seis agentes com oito poses direcionais e animação JavaScript. Abra `PREVIA-AGENTES.html` para conferir. Detalhes e limites em `ATUALIZACAO-1.1.0.md`. Os registros das versões anteriores abaixo descrevem o histórico, não o formato atual dos arquivos.
 
 Survivor / bullet heaven original em HTML5, CSS e JavaScript, com Canvas 2D. Todo o jogo roda no cliente, sem backend, conta, API, anúncio ou download de assets em tempo de execução.
 

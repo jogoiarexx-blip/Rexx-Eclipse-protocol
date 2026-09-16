@@ -14,7 +14,7 @@ window.runRexxTests = function () {
     if (!v) throw Error(msg);
   }
   function fresh() {
-    A.start();
+    A.start("rexx", "zero", "normal");
     const g = A.game;
     g.enemies.clear();
     g.grid.clear();

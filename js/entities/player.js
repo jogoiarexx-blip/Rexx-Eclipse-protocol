@@ -4,6 +4,8 @@ Rexx.Player = class {
     this.x = 3100;
     this.y = 3100;
     this.r = 15;
+    this.angle = Math.PI / 2;
+    this.animationTime = 0;
     this.level = 1;
     this.xp = 0;
     this.nextXP = 12;
@@ -78,6 +80,7 @@ Rexx.Player = class {
       );
   }
   update(g, dt) {
+    this.animationTime += dt;
     const a = g.app.input.axis(),
       s = this.stats;
     this.moving = Math.hypot(a.x, a.y) > 0.05;

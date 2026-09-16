@@ -2,6 +2,7 @@
   const key = "rexx.eclipse.v1";
   const defaults = () => ({
     version: 1,
+    difficultySchema: 2,
     coins: 0,
     permanent: {},
     achievements: [],
@@ -73,6 +74,14 @@
         if (s.records && typeof s.records === "object")
           for (const [k, v] of Object.entries(s.records))
             d.records[k] = numeric(v);
+        if (!s.difficultySchema || s.difficultySchema < 2) {
+          for (const [record, value] of Object.entries(d.records))
+            if (record.endsWith("-Normal")) {
+              const renamed = record.slice(0, -6) + "Fácil";
+              d.records[renamed] = Math.max(d.records[renamed] || 0, value);
+              delete d.records[record];
+            }
+        }
         for (const k of ["master", "music", "sfx"])
           d.settings[k] = Math.min(1, numeric(s.settings?.[k], d.settings[k]));
         for (const k of ["shake", "numbers", "particles"])

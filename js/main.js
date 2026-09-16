@@ -17,7 +17,10 @@
     start(character = "rexx", map = "zero", difficulty = 0) {
       let c = Rexx.data.characters.find((c) => c.id === character),
         m = Rexx.data.maps.find((m) => m.id === map),
-        d = Rexx.data.difficulties[difficulty];
+        d =
+          typeof difficulty === "string"
+            ? Rexx.DIFFICULTIES[difficulty]
+            : Rexx.data.difficulties[difficulty];
       if (
         !c?.test(this.save.stats) ||
         !this.unlockedMaps().includes(map) ||
@@ -32,13 +35,18 @@
     },
     pause() {
       if (!this.game) return;
-      if (this.game.state === "playing") {
+      if (
+        ["playing", "portal", "demonDeath", "demonVictory"].includes(
+          this.game.state,
+        )
+      ) {
+        this.game.resumeState = this.game.state;
         this.game.state = "paused";
         this.ui.pause();
       } else if (this.game.state === "paused") {
         if (this.ui.screen === "settings") this.ui.pause();
         else {
-          this.game.state = "playing";
+          this.game.state = this.game.resumeState || "playing";
           this.ui.hide();
         }
       }
@@ -57,7 +65,13 @@
   app.engine = new Rexx.Engine(app, document.getElementById("game"));
   app.ui.menu();
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && app.game?.state === "playing") app.pause();
+    if (
+      document.hidden &&
+      ["playing", "portal", "demonDeath", "demonVictory"].includes(
+        app.game?.state,
+      )
+    )
+      app.pause();
   });
   window.addEventListener("beforeunload", () => app.persist());
 })();

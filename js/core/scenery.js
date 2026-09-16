@@ -73,7 +73,9 @@ Rexx.Scenery = class {
           size = f.size * p.scale;
         const scale = size / Math.max(f.w, f.h);
         const dist = Math.hypot(p.x - g.player.x, p.y - g.player.y);
-        c.globalAlpha = 0.34 + Math.min(1, Math.max(0, (dist - 50) / 95)) * 0.5;
+        const light = 0.96 + Math.sin((g.time || 0) * 1.6 + p.x * 0.03) * 0.04;
+        c.globalAlpha =
+          (0.34 + Math.min(1, Math.max(0, (dist - 50) / 95)) * 0.5) * light;
         c.drawImage(
           this.image,
           f.x,

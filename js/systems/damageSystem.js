@@ -3,7 +3,8 @@ Rexx.Damage = class {
     this.g = g;
   }
   hit(e, base, w, status, knock = 0) {
-    if (!e.active) return;
+    if (!e.active || this.g.state !== "playing") return;
+    if (e.demon && (e.grace > 0 || e.hitLock > 0)) return;
     let g = this.g,
       crit = w !== "status" && Math.random() < g.player.stats.crit,
       amount =
@@ -15,12 +16,17 @@ Rexx.Damage = class {
       e.shield--;
       g.particles.burst(e.x, e.y, "#82ceff", 4);
     }
+    if (e.demon) {
+      amount = Math.min(amount, Rexx.DEMON_CONFIG.maxHit);
+      e.hitLock = Rexx.DEMON_CONFIG.hitInterval;
+    }
     amount = Math.min(e.hp, amount);
     e.hp -= amount;
     e.flash = 0.08;
     g.stats.damage += amount;
     let weapon = g.player.weapons.find((a) => a.id === w);
     if (weapon) weapon.damage += amount;
+    if (e.demon) status = null;
     if (status) {
       e.sources[status] = w;
     }
@@ -45,12 +51,14 @@ Rexx.Damage = class {
     }
     return amount;
   }
-  player(base) {
+  player(base, options = {}) {
     const g = this.g,
       p = g.player;
     if (p.invuln > 0 || p.shield > 0 || p.dash > 0 || g.state !== "playing")
       return;
-    let d = Math.max(1, base - p.stats.armor) * (1 - p.stats.resist);
+    let d = options.trueDamage
+      ? base
+      : Math.max(1, base - p.stats.armor) * (1 - p.stats.resist);
     p.hp -= d;
     p.invuln = 0.65;
     g.camera.shake = 13;
@@ -59,7 +67,9 @@ Rexx.Damage = class {
     g.particles.number(p.x, p.y, -d, false);
     if (p.hp <= 0) {
       p.hp = 0;
-      g.finish(false);
+      if (options.source?.demon) g.finale.killedPlayer(options.source);
+      else g.finish(false);
     }
+    return d;
   }
 };

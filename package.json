@@ -1,6 +1,6 @@
 {
   "name": "rexx-eclipse-protocol",
-  "version": "1.0.6",
+  "version": "1.2.0",
   "private": true,
   "description": "Survivor HTML5 original, sem depend\u00eancias de runtime",
   "scripts": {

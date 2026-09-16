@@ -12,12 +12,68 @@ Rexx.Sprites = class {
       };
       this.image.onerror = () => resolve(false);
     });
-    this.image.src = "assets/images/zone-zero/agents-walk.png";
+    this.image.src = "assets/images/zone-zero/agents-walk.webp";
+    this.directionAtlas = window.REXX_AGENT_DIRECTIONS;
+    this.directionImage = new Image();
+    this.directionReady = false;
+    const legacyLoaded = this.loaded;
+    const directionLoaded = new Promise((resolve) => {
+      this.directionImage.onload = () => {
+        this.directionReady =
+          this.directionImage.width === this.directionAtlas.width &&
+          this.directionImage.height === this.directionAtlas.height;
+        resolve(this.directionReady);
+      };
+      this.directionImage.onerror = () => resolve(false);
+      this.directionImage.src =
+        "assets/images/agents/" + this.directionAtlas.image;
+    });
+    this.loaded = Promise.all([legacyLoaded, directionLoaded]).then((results) =>
+      results.every(Boolean),
+    );
+  }
+  direction(player) {
+    return (
+      ((Math.round((player.angle ?? Math.PI / 2) / (Math.PI / 4)) % 8) + 8) % 8
+    );
   }
   frame(player) {
     return player.moving ? Math.floor((player.walkTime || 0) * 8) % 4 : 0;
   }
   drawAgent(context, player) {
+    if (this.directionReady) {
+      const animation = this.directionAtlas.characters[player.character.id];
+      if (!animation) return false;
+      const f = animation.frames[this.direction(player)];
+      const scale = 57 / animation.maxHeight;
+      const reduced = window.matchMedia?.(
+        "(prefers-reduced-motion: reduce)",
+      )?.matches;
+      const phase = (player.walkTime || 0) * 12;
+      const hop =
+        player.moving && !reduced ? Math.abs(Math.sin(phase)) * 1.8 : 0;
+      const breath =
+        !player.moving && !reduced
+          ? Math.sin((player.animationTime || 0) * 2.4) * 0.007
+          : 0;
+      context.save();
+      context.translate(0, -hop);
+      if (player.moving && !reduced) context.rotate(Math.sin(phase) * 0.025);
+      context.scale(1, 1 + breath);
+      context.drawImage(
+        this.directionImage,
+        f.x,
+        f.y,
+        f.w,
+        f.h,
+        (-f.w * scale) / 2,
+        25 - f.h * scale,
+        f.w * scale,
+        f.h * scale,
+      );
+      context.restore();
+      return true;
+    }
     const row = this.rows[player.character.id];
     if (!this.ready || row === undefined) return false;
     const frame = this.frame(player);

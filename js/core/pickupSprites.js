@@ -28,7 +28,8 @@ Rexx.PickupSprites = class {
     if (!this.ready) return false;
     const f = this.atlas.frames[this.key(p)];
     if (!f) return false;
-    const scale = f.size / Math.max(f.w, f.h);
+    const pulse = p.type === "xp" ? 1 + Math.sin((p.age || 0) * 3) * 0.06 : 1;
+    const scale = (f.size * pulse) / Math.max(f.w, f.h);
     const bob =
       p.type === "xp" ? 0 : Math.sin((p.age || 0) * 3 + p.x * 0.01) * 2;
     c.drawImage(

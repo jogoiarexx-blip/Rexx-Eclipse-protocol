@@ -1,5 +1,7 @@
 Rexx.Pickup = {
   spawn(g, x, y, type, value = 1) {
+    if (type === "coin" && g.difficulty.permanentCurrencyMultiplier === 0)
+      return;
     let p = g.pickups.get();
     if (!p) {
       if (type === "xp") {

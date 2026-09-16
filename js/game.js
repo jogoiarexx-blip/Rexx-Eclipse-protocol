@@ -5,6 +5,8 @@ Rexx.Game = class {
     this.difficulty = difficulty;
     this.player = new Rexx.Player(character, app.save);
     this.state = "playing";
+    this.bossFinalDefeated = false;
+    this.finale = new Rexx.EasyFinale(this);
     this.time = 0;
     this.uid = 0;
     this.pendingLevels = 0;
@@ -48,6 +50,7 @@ Rexx.Game = class {
       );
   }
   update(dt) {
+    if (this.finale.update(dt)) return;
     if (this.state !== "playing") return;
     this.time += dt;
     this.hurt = Math.max(0, this.hurt - dt);
@@ -61,6 +64,7 @@ Rexx.Game = class {
     });
     if (this.state !== "playing") return;
     this.weapons.update(dt);
+    if (this.state !== "playing") return;
     this.projectiles.each((p) => Rexx.Projectile.update(this, p, dt));
     this.updateZones(dt);
     this.pickups.each((p) => Rexx.Pickup.update(this, p, dt));
@@ -75,9 +79,13 @@ Rexx.Game = class {
         o.progress += dt;
         if (o.progress >= 12) {
           o.done = true;
-          this.stats.coins += 80;
+          this.addCoins(80);
           Rexx.Pickup.spawn(this, o.x, o.y, "chest");
-          this.alert("RETRANSMISSOR RESTAURADO · +80 MOEDAS");
+          this.alert(
+            this.difficulty.id === "easy"
+              ? "RETRANSMISSOR RESTAURADO"
+              : "RETRANSMISSOR RESTAURADO · +80 MOEDAS",
+          );
         }
       }
     if (this.state === "playing") {
@@ -86,6 +94,12 @@ Rexx.Game = class {
         this.openChest();
       } else if (this.pendingLevels) this.openLevel();
     }
+  }
+  addCoins(amount) {
+    const earned =
+      this.difficulty.permanentCurrencyMultiplier === 0 ? 0 : amount;
+    this.stats.coins += earned;
+    return earned;
   }
   nearest(x, y, r = 800, exclude = null) {
     let best = null,
@@ -280,20 +294,30 @@ Rexx.Game = class {
   }
   kill(e, reward = true) {
     if (!e.active) return;
+    if (e.demon) {
+      this.enemies.release(e);
+      this.stats.kills++;
+      this.finale.defeated(e);
+      return;
+    }
     this.enemies.release(e);
     this.particles.burst(e.x, e.y, e.data.color, e.elite ? 30 : 5);
     if (!reward) return;
     this.stats.kills++;
     this.app.save.discoveries[e.id] =
       (this.app.save.discoveries[e.id] || 0) + 1;
+    if (e.escort) return;
     if (e.boss) {
       this.stats.bosses++;
-      this.stats.coins += 150;
+      this.addCoins(150);
       this.alert("ENTIDADE ELIMINADA · " + e.data.name);
-      Rexx.Pickup.spawn(this, e.x, e.y, "chest", 3);
+      if (!e.final) Rexx.Pickup.spawn(this, e.x, e.y, "chest", 3);
       this.app.audio.mode = "map";
       if (e.final) {
-        this.finish(true);
+        if (this.bossFinalDefeated) return;
+        this.bossFinalDefeated = true;
+        if (this.difficulty.id === "easy") this.finale.begin();
+        else this.finish(true);
         return;
       }
     } else if (e.elite) Rexx.Pickup.spawn(this, e.x, e.y, "chest", 1);
@@ -323,7 +347,7 @@ Rexx.Game = class {
         );
         break;
       case "coin":
-        this.stats.coins += p.value;
+        this.addCoins(p.value);
         break;
       case "magnet":
         this.pickups.each((x) => {
@@ -410,12 +434,13 @@ Rexx.Game = class {
       }
     }
     let coins = 20 + Math.floor(Math.random() * 35);
-    this.stats.coins += coins;
-    rewards.push({
-      name: coins + " moedas",
-      desc: "Adicionadas à recompensa da missão.",
-      icon: "◉",
-    });
+    coins = this.addCoins(coins);
+    if (coins)
+      rewards.push({
+        name: coins + " moedas",
+        desc: "Adicionadas à recompensa da missão.",
+        icon: "◉",
+      });
     this.app.audio.play("chest");
     this.app.ui.chest(rewards);
   }
@@ -431,8 +456,9 @@ Rexx.Game = class {
     this.alertText = text;
     this.alertLife = life;
   }
-  finish(win) {
-    if (this.state === "ended") return;
+  finish(win, special = false) {
+    if (this.finalized) return;
+    this.finalized = true;
     this.state = "ended";
     const s = this.app.save,
       st = s.stats,
@@ -461,10 +487,14 @@ Rexx.Game = class {
         this.stats.kills * 0.08 +
         this.time * 0.12 +
         (win ? 450 : 0)) *
-        this.difficulty.reward,
+        this.difficulty.reward *
+        this.difficulty.permanentCurrencyMultiplier,
     );
     s.coins += this.reward;
-    this.newAchievements = Rexx.Achievements.check(this.app);
+    this.newAchievements = Rexx.Achievements.check(
+      this.app,
+      this.difficulty.permanentCurrencyMultiplier,
+    );
     this.unlocks = Rexx.data.characters
       .filter((c) => c.test(st) && !beforeChars.includes(c.id))
       .map((c) => c.name)
@@ -476,6 +506,7 @@ Rexx.Game = class {
       );
     this.app.persist();
     this.app.audio.play(win ? "win" : "lose");
-    this.app.ui.result(win);
+    if (special) this.app.ui.demonResult();
+    else this.app.ui.result(win);
   }
 };

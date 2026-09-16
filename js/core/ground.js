@@ -30,7 +30,7 @@ Rexx.Ground = class {
               resolve(true);
             };
             image.onerror = () => resolve(false);
-            image.src = basePath + map.id + ".png";
+            image.src = basePath + map.id + ".webp";
           }),
       ),
     );

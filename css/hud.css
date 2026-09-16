@@ -194,3 +194,7 @@
     width: 70%;
   }
 }
+
+.slot .weapon-art { animation: core-breath 3s ease-in-out infinite; }
+@keyframes core-breath { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.15); } }
+@media (prefers-reduced-motion: reduce) { .slot .weapon-art { animation: none; } }

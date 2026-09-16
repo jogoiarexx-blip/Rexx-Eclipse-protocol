@@ -271,6 +271,7 @@ Rexx.Engine = class {
     });
     c.globalAlpha = 1;
     g.particles.draw(c);
+    g.finale?.drawWorld(c);
     c.restore();
     if (g.hurt > 0) {
       c.fillStyle = `rgba(255,60,85,${g.hurt * 0.5})`;
@@ -299,12 +300,13 @@ Rexx.Engine = class {
       c.fillStyle = g.map.color;
       c.fillText(g.alertText, w / 2, 141);
     }
-    if (g.time >= 1800) {
+    if (g.time >= Rexx.ENCOUNTERS.finalAt && !g.bossFinalDefeated) {
       c.font = "12px monospace";
       c.fillStyle = "#ff9fad";
       c.textAlign = "center";
       c.fillText("DESTRUA A ENTIDADE PARA CONCLUIR A EXTRAÇÃO", w / 2, h - 90);
     }
+    g.finale?.drawScreen(c, w, h);
   }
   tile(c, g, x, y, s) {
     let seed = Math.abs(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1;
@@ -356,6 +358,16 @@ Rexx.Engine = class {
     }
   }
   entity(c, e, t) {
+    if (e.demon) {
+      const f = this.app.game.finale;
+      Rexx.Demon.draw(
+        c,
+        e,
+        f.phase.startsWith("death") ? f.timer : t,
+        f.phase.startsWith("death") ? "laugh" : e.anim,
+      );
+      return;
+    }
     if (this.app.enemySprites?.draw(c, e, t, this.app.game?.map.id || "zero"))
       return;
     c.save();
@@ -446,11 +458,17 @@ Rexx.Engine = class {
       t = g.time;
     c.save();
     c.translate(p.x, p.y);
+    if (g.specialDeath) {
+      const fall = Math.min(1, g.finale.timer / 0.45);
+      c.rotate((fall * Math.PI) / 2);
+      c.scale(1, 1 - fall * 0.3);
+    }
     c.fillStyle = "#0006";
     c.beginPath();
     c.ellipse(0, 15, 20, 7, 0, 0, 7);
     c.fill();
-    if (p.invuln > 0 && Math.floor(t * 20) % 2) c.globalAlpha = 0.4;
+    if (!g.specialDeath && p.invuln > 0 && Math.floor(t * 20) % 2)
+      c.globalAlpha = 0.4;
     if (!g.app.sprites?.drawAgent(c, p)) {
       c.strokeStyle = p.character.color;
       c.fillStyle = "#223c47";
@@ -501,6 +519,7 @@ Rexx.Engine = class {
       c.stroke();
     }
     c.restore();
+    if (g.specialDeath) return;
     for (const w of p.weapons) {
       let d = Rexx.data.weapons.find((a) => a.id === w.id);
       c.strokeStyle = d.color;

@@ -69,6 +69,17 @@ Rexx.Upgrades = {
         level: 1,
         desc: "Receba 40 moedas.",
       });
+    if (g.difficulty.permanentCurrencyMultiplier === 0)
+      for (let i = 0; i < all.length; i++)
+        if (all[i].kind === "coin")
+          all[i] = {
+            kind: "heal",
+            id: "easy-repair-" + i,
+            name: "Reparo de campo",
+            icon: "✚",
+            level: 1,
+            desc: "Recupere 35% do HP máximo. Fácil não concede moedas.",
+          };
     const out = [];
     while (out.length < 3 && all.length) {
       let i = Math.floor(Math.random() * all.length),
@@ -103,7 +114,7 @@ Rexx.Upgrades = {
       p.recalc(g.app.save);
     } else if (o.kind === "heal")
       p.hp = Math.min(p.stats.hp, p.hp + p.stats.hp * 0.35);
-    else g.stats.coins += 40;
+    else g.addCoins(40);
     g.app.audio.play("level");
   },
   evolve(g) {

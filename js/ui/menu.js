@@ -74,7 +74,7 @@ Rexx.UI = class {
     this.screen = "select";
     const b = this.shell(
       "Preparar missão",
-      "Sobreviva 30 minutos e destrua a entidade regional. Ataques e habilidades são automáticos.",
+      "Minichefe aos 10:00. Batalha final aos 15:00: entidade regional + 2 minichefes. Ataques e habilidades são automáticos.",
     );
     b.innerHTML =
       '<h3>01 / AGENTE</h3><div class="grid agents"></div><h3>02 / REGIÃO</h3><div class="grid maps"></div><h3>03 / INTENSIDADE</h3><div class="difficulty"></div><div class="launch"></div>';
@@ -139,7 +139,12 @@ Rexx.UI = class {
       let ok = this.app.save.stats.wins >= d.wins;
       diff.append(
         this.button(
-          d.name + (ok ? ` · ${d.reward}× moedas` : ` · ${d.wins} vitórias`),
+          d.name +
+            (ok
+              ? d.id === "easy"
+                ? " · sem moedas permanentes"
+                : ` · ${d.reward}× moedas`
+              : ` · ${d.wins} vitórias`),
           () => {
             if (ok) {
               this.selectedDifficulty = i;
@@ -150,6 +155,11 @@ Rexx.UI = class {
         ),
       );
     });
+    const info = document.createElement("p");
+    info.className = "difficulty-info";
+    info.textContent =
+      Rexx.data.difficulties[this.selectedDifficulty].description;
+    diff.after(info);
     b.querySelector(".launch").append(
       this.button(
         "ENTRAR NA FENDA →",
