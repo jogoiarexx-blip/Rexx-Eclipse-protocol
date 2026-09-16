@@ -1,13 +1,14 @@
 {
   "name": "rexx-eclipse-protocol",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "private": true,
-  "description": "Survivor HTML5 original, sem depend\u00eancias de runtime",
+  "description": "Survivor HTML5 original, sem dependências de runtime",
   "scripts": {
     "test": "node tests/core-tests.cjs",
     "test:soak": "node tests/soak-tests.cjs",
     "test:browser": "node tests/browser-tests.cjs",
-    "test:sprites": "node tests/sprite-tests.cjs"
+    "test:sprites": "node tests/sprite-tests.cjs",
+    "test:fx": "node tests/combat-fx-tests.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",

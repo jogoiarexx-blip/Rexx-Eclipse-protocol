@@ -1,7 +1,7 @@
 "use strict";
 // One shared namespace; classic deferred scripts also work over file://.
 window.Rexx = {
-  version: "1.2.0",
+  version: "1.2.2",
   C: {
     duration: 900,
     world: 6200,

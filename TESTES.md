@@ -119,3 +119,7 @@ Relatório: `tests/results/sprite-results-v1.1.0.json`. Ambiente JSDOM + Canvas 
 `tests/browser-tests.cjs` também inclui os novos casos e espera o carregamento dos WebP para uma futura reprodução em Chromium real.
 
 A tentativa de instalar o Chromium headless neste ambiente não concluiu: o download expirou. Por isso, os resultados desta entrega não devem ser interpretados como validação em navegador real.
+
+
+## v1.2.2 — efeitos de combate
+32 grupos de regressão/balanceamento e verificação dos assets passaram em JSDOM + Canvas nativo. `tests/combat-fx-tests.cjs` verifica renderização, qualidade baixa e isolamento do estado visual. Prévia dos efeitos inspecionada. Teste em navegador real e medição de FPS pendentes.

@@ -250,6 +250,7 @@ Rexx.Game = class {
       if (!z.triggered) {
         z.triggered = true;
         this.particles.burst(z.x, z.y, z.color, 14);
+        if (!z.beam) this.particles.flash(z.x, z.y, z.color, z.r);
         if (z.secondary)
           for (let j = 0; j < 4; j++)
             this.zone(

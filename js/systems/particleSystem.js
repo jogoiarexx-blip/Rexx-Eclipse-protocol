@@ -19,9 +19,17 @@ Rexx.Particles = class {
         max: 0.6,
         color,
         text: null,
+        kind: "spark",
         size: Rexx.util.rand(2, 5),
       });
     }
+  }
+  flash(x, y, color, size = 18, kind = "ring") {
+    if (!this.g.app.save.settings.particles || this.pool.count > 260) return;
+    const p = this.pool.get();
+    if (!p) return;
+    Object.assign(p, { x, y, vx: 0, vy: 0, color, size, kind, text: null,
+      life: kind === "muzzle" ? 0.09 : 0.3, max: kind === "muzzle" ? 0.09 : 0.3 });
   }
   number(x, y, v, crit) {
     if (
@@ -40,6 +48,7 @@ Rexx.Particles = class {
         life: 0.65,
         max: 0.65,
         color: v < 0 ? "#ff7789" : crit ? "#ffd176" : "#d1e7e5",
+        kind: "number",
         text: Math.ceil(v).toString(),
         size: crit ? 19 : 12,
       });
@@ -61,7 +70,15 @@ Rexx.Particles = class {
       if (p.text) {
         c.font = `bold ${p.size}px monospace`;
         c.fillText(p.text, p.x, p.y);
-      } else c.fillRect(p.x, p.y, p.size, p.size);
+      } else if (p.kind === "ring" || p.kind === "muzzle") {
+        const t = 1 - p.life / p.max;
+        c.strokeStyle = p.color;
+        c.lineWidth = p.kind === "muzzle" ? 3 : 2 * (1 - t) + 0.5;
+        c.beginPath(); c.arc(p.x, p.y, Math.max(1, p.size * (0.2 + t * 0.8)), 0, Math.PI * 2); c.stroke();
+      } else {
+        c.strokeStyle = p.color; c.lineWidth = Math.max(1, p.size * p.life / p.max);
+        c.beginPath(); c.moveTo(p.x, p.y); c.lineTo(p.x - p.vx * 0.035, p.y - p.vy * 0.035); c.stroke();
+      }
     });
     c.globalAlpha = 1;
   }

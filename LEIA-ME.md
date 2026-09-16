@@ -1,4 +1,6 @@
-# REXX: ECLIPSE PROTOCOL — v1.2.0
+# REXX: ECLIPSE PROTOCOL — v1.2.2
+
+**v1.2.1:** demônio com 5.000 HP. Visual procedural animado em Canvas, sem sprite sheet própria.
 
 **Balanceamento atual:** minichefe aos 10:00; chefe + dois minichefes aos 15:00. Fácil não concede moedas permanentes e possui o evento secreto do demônio. Detalhes em `ATUALIZACAO-1.2.0.md`.
 

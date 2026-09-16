@@ -173,18 +173,18 @@ window.runBalanceTests = function () {
   test("Demon fixed HP, speed, pursuit, bounded incoming hits and all animation states", () => {
     const g = hunt(),
       e = g.finale.demon;
-    ok(e.hp === 1000 && e.maxHP === 1000 && e.damage === 100);
+    ok(e.hp === 5000 && e.maxHP === 5000 && e.damage === 100);
     ok(e.speed === 220 * 1.35);
     const d = R.util.dist(e, g.player);
     R.Demon.update(g, e, 0.1);
     ok(R.util.dist(e, g.player) < d);
     g.damage.hit(e, 1e9, "ghost");
-    ok(e.hp === 1000, "spawn grace");
+    ok(e.hp === 5000, "spawn grace");
     e.grace = 0;
     g.damage.hit(e, 1e9, "ghost");
-    ok(e.hp === 875, "cannot be one-shot");
+    ok(e.hp === 4875, "cannot be one-shot");
     g.damage.hit(e, 1e9, "ghost");
-    ok(e.hp === 875, "per-hit recovery");
+    ok(e.hp === 4875, "per-hit recovery");
     for (const mode of ["idle", "run", "attack", "hurt", "laugh", "death"])
       R.Demon.draw(A.engine.c, e, 0.3, mode);
     A.engine.draw(g);
@@ -249,7 +249,7 @@ window.runBalanceTests = function () {
       e = g.finale.demon,
       before = A.save.coins;
     e.grace = 0;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 40; i++) {
       e.hitLock = 0;
       g.damage.hit(e, 1e9, "ghost");
     }

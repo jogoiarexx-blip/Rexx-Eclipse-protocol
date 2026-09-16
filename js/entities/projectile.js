@@ -28,6 +28,7 @@ Rexx.Projectile = {
       o,
     );
     p.hits.clear();
+    g.particles.flash(p.x, p.y, p.color, p.hostile ? 10 : 15, "muzzle");
     return p;
   },
   update(g, p, dt) {
@@ -65,7 +66,11 @@ Rexx.Projectile = {
       if (p.hits.has(e.uid) || Math.hypot(e.x - p.x, e.y - p.y) > e.r + p.r)
         continue;
       p.hits.add(e.uid);
-      g.damage.hit(e, p.damage, p.weapon, p.status, 40);
+      const dealt = g.damage.hit(e, p.damage, p.weapon, p.status, 40);
+      if (dealt > 0) {
+        g.particles.flash(p.x, p.y, p.color, 18);
+        g.particles.burst(p.x, p.y, p.color, 3);
+      }
       if (p.split) {
         p.split = false;
         for (let j = -1; j <= 1; j += 2)

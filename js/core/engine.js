@@ -196,6 +196,10 @@ Rexx.Engine = class {
       }
       c.restore();
     });
+    g.zones.each((z) => {
+      if (z.x + z.r < left || z.x - z.r > right || z.y + z.r < top || z.y - z.r > bottom) return;
+      Rexx.CombatFX.zone(c, z, g.time, this.app.save.settings.quality === "baixa");
+    });
     g.pickups.each((p) => {
       if (p.x < left || p.x > right || p.y < top || p.y > bottom) return;
       if (this.app.pickupSprites?.draw(c, p)) return;
@@ -247,28 +251,11 @@ Rexx.Engine = class {
       this.entity(c, e, g.time);
     });
     g.projectiles.each((p) => {
-      if (this.app.weaponSprites?.projectile(c, p)) return;
-      c.fillStyle = p.color;
-      c.strokeStyle = p.color;
-      c.lineWidth = p.r;
-      c.beginPath();
-      c.moveTo(p.x, p.y);
-      c.lineTo(p.x - p.vx * 0.025, p.y - p.vy * 0.025);
-      c.stroke();
-      c.beginPath();
-      c.arc(p.x, p.y, p.r, 0, 7);
-      c.fill();
+      if (p.x < left - 90 || p.x > right + 90 || p.y < top - 90 || p.y > bottom + 90) return;
+      Rexx.CombatFX.projectile(c, p, this.app);
     });
     this.player(c, g);
-    g.lines.each((l) => {
-      c.globalAlpha = l.life / l.max;
-      c.strokeStyle = l.color;
-      c.lineWidth = l.width;
-      c.beginPath();
-      c.moveTo(l.x, l.y);
-      c.lineTo(l.tx, l.ty);
-      c.stroke();
-    });
+    g.lines.each((l) => Rexx.CombatFX.line(c, l, this.app.save.settings.quality === "baixa"));
     c.globalAlpha = 1;
     g.particles.draw(c);
     g.finale?.drawWorld(c);

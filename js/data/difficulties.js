@@ -83,7 +83,7 @@ Rexx.ENCOUNTERS = {
 };
 Rexx.DEMON_CONFIG = {
   id: "NOOB_PUNISHER_DEMON",
-  hp: 1000,
+  hp: 5000,
   damage: 100,
   speedMultiplier: 1.35,
   attackCooldown: 1,
