@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>REXX · Cenários das regiões</title>
+  <style>
+    body {
+      margin: 0;
+      background: #081119;
+      color: #e1f4ef;
+      font: 16px system-ui;
+    }
+    main {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 25px;
+    }
+    select,
+    a {
+      background: #152932;
+      color: #acf1d7;
+      padding: 12px;
+      border: 1px solid #36534f;
+      border-radius: 6px;
+    }
+    canvas {
+      width: 100%;
+      height: auto;
+      border: 1px solid #36534f;
+      margin: 20px 0;
+    }
+    p {
+      color: #a7bdbe;
+      line-height: 1.6;
+    }
+    a {
+      display: inline-block;
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+    }
+  </style>
+  <main>
+    <h1>REXX · Cenários das cinco regiões</h1>
+    <p>
+      Prévia do mesmo piso usado no jogo: textura repetida com espelhamento nas
+      bordas e tonalização para leitura do combate.
+    </p>
+    <label
+      >Região
+      <select id="region"></select
+    ></label>
+    <label
+      ><input id="props" type="checkbox" checked /> Mostrar decoração</label
+    >
+    <canvas id="floor" width="1024" height="640"></canvas>
+    <p id="status">Carregando texturas…</p>
+    <a id="source">Abrir PNG original</a>
+  </main>
+  <script src="../../../js/config.js"></script>
+  <script src="../../../js/data/maps.js"></script>
+  <script src="../../../js/core/ground.js"></script>
+  <script src="../scenery/atlas-data.js"></script>
+  <script src="../../../js/core/scenery.js"></script>
+  <script>
+    // This page is inside the asset folder; the loader accepts its local base path.
+    const select = document.getElementById("region"),
+      canvas = document.getElementById("floor");
+    for (const map of Rexx.data.maps) {
+      const o = document.createElement("option");
+      o.value = map.id;
+      o.textContent = map.name;
+      select.append(o);
+    }
+    const ground = new Rexx.Ground("./");
+    const scenery = new Rexx.Scenery("../scenery/");
+    const fixture = {
+      map: Rexx.data.maps[0],
+      player: { x: 2912, y: 2720 },
+      objectives: [],
+    };
+    function draw() {
+      const map = Rexx.data.maps.find((m) => m.id === select.value);
+      const c = canvas.getContext("2d");
+      fixture.map = map;
+      c.save();
+      c.translate(-2400, -2400);
+      const ok = ground.draw(c, map, 2400, 2400, 3424, 3040);
+      if (document.getElementById("props").checked)
+        scenery.draw(c, fixture, 2400, 2400, 3424, 3040);
+      c.restore();
+      document.getElementById("status").textContent = ok
+        ? map.name + " · piso estático, sem efeito sobre colisões."
+        : "Não foi possível carregar esta textura.";
+      document.getElementById("source").href = map.id + ".png";
+    }
+    Promise.all([ground.loaded, scenery.loaded]).then(draw);
+    document.getElementById("props").addEventListener("change", draw);
+    select.addEventListener("change", draw);
+  </script>
+</html>

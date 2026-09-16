@@ -1,0 +1,20 @@
+Use case: stylized-concept. Asset type: actual weapon spritesheet for original dark sci-fi survivor game REXX Eclipse Protocol. Exactly FIFTEEN isolated weapon icons in a regular FIVE COLUMN by THREE ROW grid, landscape 1536x1024. Each object entirely inside its cell with generous transparent margins. GENUINELY transparent RGBA background, no painted checkerboard, no background panels, no labels, no words, no numbers, no border. Hand-painted high quality game sprites, crisp silhouette readable at 32px, dark titanium and restrained colored energy. Overhead three-quarter camera consistent across all.
+Row1 left to right:
+1 one sleek elongated double-ended orbital blade with teal glowing cutting edges, horizontal;
+2 compact Tesla cannon with blue electrical coils;
+3 small green-accent Raptor drone with two side rotors and pointed forward barrel, overhead;
+4 circular orange solar reactor core;
+5 spherical violet gravity pulse emitter in a mechanical ring.
+Row2 left to right:
+1 pale cyan spectral chain with three angular connected links;
+2 compact meteor targeting module with a fiery red-orange rocky meteor above it;
+3 magenta triangular refracting prism in a metal frame;
+4 squat violet vacuum seed mine with four tiny feet;
+5 lime ion throwing disc viewed mostly from above.
+Row3 left to right:
+1 cluster of three cyan frost needle darts pointing upward;
+2 green toxic ampoule in a protective dark frame;
+3 long pink-accent magnetic rail cannon horizontally oriented;
+4 golden curved returning arc blade horizontally oriented;
+5 white-violet dimensional resonance bell emitter with concentric mechanical rings.
+No characters, no hands holding weapons, no smoke connecting cells. Fifteen distinct usable icons, no animation variants. Each centered, isolated, consistent visual scale.

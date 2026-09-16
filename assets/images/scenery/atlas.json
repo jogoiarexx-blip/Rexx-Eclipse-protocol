@@ -1,0 +1,177 @@
+{
+  "image": "props.png",
+  "width": 1024,
+  "height": 1536,
+  "maps": {
+    "zero": [
+      {
+        "name": "Antena caída",
+        "x": 34,
+        "y": 56,
+        "w": 208,
+        "h": 237,
+        "size": 104
+      },
+      {
+        "name": "Parede desabada",
+        "x": 274,
+        "y": 74,
+        "w": 233,
+        "h": 217,
+        "size": 100
+      },
+      {
+        "name": "Gerador esmagado",
+        "x": 533,
+        "y": 94,
+        "w": 211,
+        "h": 195,
+        "size": 90
+      },
+      {
+        "name": "Entulho urbano",
+        "x": 774,
+        "y": 107,
+        "w": 218,
+        "h": 185,
+        "size": 70
+      }
+    ],
+    "glass": [
+      {
+        "name": "Cristais de sílica",
+        "x": 33,
+        "y": 348,
+        "w": 201,
+        "h": 231,
+        "size": 104
+      },
+      {
+        "name": "Rocha vitrificada",
+        "x": 280,
+        "y": 382,
+        "w": 208,
+        "h": 182,
+        "size": 100
+      },
+      {
+        "name": "Sonda soterrada",
+        "x": 526,
+        "y": 364,
+        "w": 226,
+        "h": 218,
+        "size": 90
+      },
+      {
+        "name": "Estilhaços de vidro",
+        "x": 794,
+        "y": 401,
+        "w": 200,
+        "h": 158,
+        "size": 70
+      }
+    ],
+    "omega": [
+      {
+        "name": "Servidor abandonado",
+        "x": 33,
+        "y": 633,
+        "w": 208,
+        "h": 237,
+        "size": 104
+      },
+      {
+        "name": "Unidade de refrigeração",
+        "x": 288,
+        "y": 655,
+        "w": 195,
+        "h": 208,
+        "size": 100
+      },
+      {
+        "name": "Tubo industrial rompido",
+        "x": 525,
+        "y": 675,
+        "w": 224,
+        "h": 178,
+        "size": 90
+      },
+      {
+        "name": "Painéis e cabos",
+        "x": 784,
+        "y": 659,
+        "w": 210,
+        "h": 201,
+        "size": 70
+      }
+    ],
+    "forest": [
+      {
+        "name": "Tronco corrompido",
+        "x": 26,
+        "y": 908,
+        "w": 220,
+        "h": 274,
+        "size": 104
+      },
+      {
+        "name": "Raízes expostas",
+        "x": 274,
+        "y": 942,
+        "w": 220,
+        "h": 218,
+        "size": 100
+      },
+      {
+        "name": "Colônia de fungos",
+        "x": 529,
+        "y": 971,
+        "w": 211,
+        "h": 176,
+        "size": 90
+      },
+      {
+        "name": "Folhas e pedras",
+        "x": 785,
+        "y": 945,
+        "w": 205,
+        "h": 221,
+        "size": 70
+      }
+    ],
+    "abyss": [
+      {
+        "name": "Obelisco partido",
+        "x": 41,
+        "y": 1206,
+        "w": 198,
+        "h": 287,
+        "size": 104
+      },
+      {
+        "name": "Anel fragmentado",
+        "x": 273,
+        "y": 1258,
+        "w": 218,
+        "h": 184,
+        "size": 100
+      },
+      {
+        "name": "Minerais do vazio",
+        "x": 528,
+        "y": 1225,
+        "w": 222,
+        "h": 234,
+        "size": 90
+      },
+      {
+        "name": "Fragmentos de obsidiana",
+        "x": 789,
+        "y": 1270,
+        "w": 196,
+        "h": 182,
+        "size": 70
+      }
+    ]
+  }
+}

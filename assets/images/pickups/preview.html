@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>REXX · Itens e baús</title
+  ><link rel="stylesheet" href="../../../css/pickups.css" />
+  <style>
+    body {
+      background: #0a151d;
+      color: #d4e9e6;
+      font: 16px system-ui;
+      margin: 30px;
+    }
+    h1 {
+      font-size: 26px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    figure {
+      margin: 0;
+      background: #1b2b31;
+      padding: 14px;
+      border: 1px solid #3c5359;
+      border-radius: 10px;
+    }
+    figure canvas {
+      width: 100%;
+      max-width: 180px;
+    }
+    figcaption {
+      font-size: 14px;
+    }
+    button {
+      background: #193c42;
+      color: #c9fff0;
+      padding: 12px;
+      border: 1px solid #5da492;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+  <h1>REXX · Itens e baús</h1>
+  <p id="status">Carregando…</p>
+  <div id="gallery" class="grid"></div>
+  <h2>Abertura do baú</h2>
+  <div id="chest"></div>
+  <button id="replay" type="button">Repetir abertura</button>
+  <script src="../../../js/config.js"></script>
+  <script src="atlas-data.js"></script>
+  <script src="../../../js/core/pickupSprites.js"></script>
+  <script>
+    const sprites = new Rexx.PickupSprites("./");
+    function replay() {
+      const node = sprites.chestElement();
+      if (node) document.getElementById("chest").replaceChildren(node);
+    }
+    document.getElementById("replay").addEventListener("click", replay);
+    sprites.loaded.then((ok) => {
+      document.getElementById("status").textContent = ok
+        ? "12 sprites: quatro tipos de XP, cinco consumíveis e três quadros do baú."
+        : "Falha ao carregar items.png.";
+      if (!ok) return;
+      for (const f of Object.values(sprites.atlas.frames)) {
+        const figure = document.createElement("figure"),
+          c = document.createElement("canvas"),
+          caption = document.createElement("figcaption");
+        c.width = c.height = 180;
+        const scale = 150 / Math.max(f.w, f.h);
+        c.getContext("2d").drawImage(
+          sprites.image,
+          f.x,
+          f.y,
+          f.w,
+          f.h,
+          (180 - f.w * scale) / 2,
+          (180 - f.h * scale) / 2,
+          f.w * scale,
+          f.h * scale,
+        );
+        caption.textContent = f.name;
+        figure.append(c, caption);
+        document.getElementById("gallery").append(figure);
+      }
+      replay();
+    });
+  </script>
+</html>

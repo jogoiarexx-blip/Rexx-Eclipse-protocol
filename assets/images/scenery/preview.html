@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>REXX · Decoração</title>
+  <style>
+    body {
+      background: #0a151d;
+      color: #d4e9e6;
+      font: 16px system-ui;
+      margin: 30px;
+    }
+    h1 {
+      font-size: 26px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+    }
+    figure {
+      margin: 0;
+      background: #1b2b31;
+      padding: 14px;
+      border: 1px solid #3c5359;
+      border-radius: 10px;
+    }
+    canvas {
+      width: 100%;
+      max-width: 220px;
+    }
+    figcaption {
+      font-size: 14px;
+    }
+    a {
+      color: #92eacb;
+    }
+  </style>
+  <h1>REXX · 20 elementos de cenário</h1>
+  <p>
+    Quatro sprites por fase. Decoração estática, sem colisão.
+    <a href="../ground/preview.html">Ver aplicados nos pisos</a>
+  </p>
+  <p id="status">Carregando…</p>
+  <div id="gallery"></div>
+  <script src="atlas-data.js"></script>
+  <script>
+    const names = {
+        zero: "Zona Zero",
+        glass: "Deserto de Vidro",
+        omega: "Complexo Ômega",
+        forest: "Floresta Corrompida",
+        abyss: "Abismo",
+      },
+      im = new Image();
+    im.onload = () => {
+      document.getElementById("status").textContent =
+        "Todos os sprites carregados.";
+      for (const [id, frames] of Object.entries(REXX_SCENERY_ATLAS.maps)) {
+        const h = document.createElement("h2");
+        h.textContent = names[id];
+        const grid = document.createElement("section");
+        grid.className = "grid";
+        document.getElementById("gallery").append(h, grid);
+        for (const f of frames) {
+          const figure = document.createElement("figure"),
+            c = document.createElement("canvas"),
+            caption = document.createElement("figcaption");
+          c.width = c.height = 220;
+          const scale = 190 / Math.max(f.w, f.h);
+          c.getContext("2d").drawImage(
+            im,
+            f.x,
+            f.y,
+            f.w,
+            f.h,
+            (220 - f.w * scale) / 2,
+            (220 - f.h * scale) / 2,
+            f.w * scale,
+            f.h * scale,
+          );
+          caption.textContent = f.name;
+          figure.append(c, caption);
+          grid.append(figure);
+        }
+      }
+    };
+    im.onerror = () =>
+      (document.getElementById("status").textContent =
+        "Falha ao carregar props.png.");
+    im.src = "props.png";
+  </script>
+</html>

@@ -1,0 +1,30 @@
+{
+  "method": "Ferramenta integrada de geração de imagens; PNGs originais preservados.",
+  "prompts": [
+    {
+      "id": "zero",
+      "name": "Zona Zero",
+      "prompt": "Use case: stylized-concept. Asset type: seamless repeating ground texture for original top-down 2D survivor game REXX Eclipse Protocol. Region: Zona Zero. Create ONE square opaque texture, entire image is walkable flat ground: charcoal cracked asphalt and worn concrete patches, sparse embedded steel fragments, extremely subtle teal dimensional hairline cracks. Hand-painted high quality dark sci-fi game texture, restrained detailed surface, orthographic straight overhead view. Uniform diffuse ambient lighting, low contrast mid-dark values, no central focal point, balanced detail density. Tileable seamlessly on all four edges: matching opposite edges and uniform edge brightness. Full bleed material, no border, no grid of samples, no labels, no text, no characters, no tall props, no objects casting strong shadows, no perspective horizon, no vignette, no bright lights. This is the actual usable ground tile, not a mockup or a sheet of multiple materials. 1024x1024."
+    },
+    {
+      "id": "glass",
+      "name": "Deserto de Vidro",
+      "prompt": "Use case: stylized-concept. Asset type: seamless repeating ground texture for original top-down 2D survivor game REXX Eclipse Protocol. Region: Deserto de Vidro. Create ONE square opaque texture, entire image is walkable flat ground: dark ochre sand fused into smoky amber glass, fine wind ripples and embedded small glass chips, subdued amber hairline fractures. Hand-painted high quality dark sci-fi game texture, restrained detailed surface, orthographic straight overhead view. Uniform diffuse ambient lighting, low contrast mid-dark values, no central focal point, balanced detail density. Tileable seamlessly on all four edges: matching opposite edges and uniform edge brightness. Full bleed material, no border, no grid of samples, no labels, no text, no characters, no tall props, no objects casting strong shadows, no perspective horizon, no vignette, no bright lights. This is the actual usable ground tile, not a mockup or a sheet of multiple materials. 1024x1024."
+    },
+    {
+      "id": "omega",
+      "name": "Complexo Ômega",
+      "prompt": "Use case: stylized-concept. Asset type: seamless repeating ground texture for original top-down 2D survivor game REXX Eclipse Protocol. Region: Complexo Ômega. Create ONE square opaque texture, entire image is walkable flat ground: dark blue graphite industrial floor, interlocking worn metal plates, recessed seams and small rivets, sparse dim blue circuit lines. Hand-painted high quality dark sci-fi game texture, restrained detailed surface, orthographic straight overhead view. Uniform diffuse ambient lighting, low contrast mid-dark values, no central focal point, balanced detail density. Tileable seamlessly on all four edges: matching opposite edges and uniform edge brightness. Full bleed material, no border, no grid of samples, no labels, no text, no characters, no tall props, no objects casting strong shadows, no perspective horizon, no vignette, no bright lights. This is the actual usable ground tile, not a mockup or a sheet of multiple materials. 1024x1024."
+    },
+    {
+      "id": "forest",
+      "name": "Floresta Corrompida",
+      "prompt": "Use case: stylized-concept. Asset type: seamless repeating ground texture for original top-down 2D survivor game REXX Eclipse Protocol. Region: Floresta Corrompida. Create ONE square opaque texture, entire image is walkable flat ground: dark mossy earth, flattened intertwined thin roots, decaying leaf fragments, sparse dim sickly green fungal veins. Hand-painted high quality dark sci-fi game texture, restrained detailed surface, orthographic straight overhead view. Uniform diffuse ambient lighting, low contrast mid-dark values, no central focal point, balanced detail density. Tileable seamlessly on all four edges: matching opposite edges and uniform edge brightness. Full bleed material, no border, no grid of samples, no labels, no text, no characters, no tall props, no objects casting strong shadows, no perspective horizon, no vignette, no bright lights. This is the actual usable ground tile, not a mockup or a sheet of multiple materials. 1024x1024."
+    },
+    {
+      "id": "abyss",
+      "name": "Abismo",
+      "prompt": "Use case: stylized-concept. Asset type: seamless repeating ground texture for original top-down 2D survivor game REXX Eclipse Protocol. Region: Abismo. Create ONE square opaque texture, entire image is walkable flat ground: dark violet black alien basalt, irregular fractured obsidian slabs, sparse faint lavender dimensional veins, ancient eroded mineral surface. Hand-painted high quality dark sci-fi game texture, restrained detailed surface, orthographic straight overhead view. Uniform diffuse ambient lighting, low contrast mid-dark values, no central focal point, balanced detail density. Tileable seamlessly on all four edges: matching opposite edges and uniform edge brightness. Full bleed material, no border, no grid of samples, no labels, no text, no characters, no tall props, no objects casting strong shadows, no perspective horizon, no vignette, no bright lights. This is the actual usable ground tile, not a mockup or a sheet of multiple materials. 1024x1024."
+    }
+  ]
+}

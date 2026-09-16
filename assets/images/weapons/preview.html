@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>REXX · Arsenal visual</title>
+  <style>
+    body {
+      background: #0a151d;
+      color: #d4e9e6;
+      font: 16px system-ui;
+      margin: 30px;
+    }
+    h1 {
+      font-size: 26px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    figure {
+      margin: 0;
+      background: #1b2b31;
+      padding: 14px;
+      border: 1px solid #3c5359;
+      border-radius: 10px;
+    }
+    canvas {
+      width: 100%;
+      max-width: 180px;
+    }
+    figcaption {
+      font-size: 14px;
+    }
+  </style>
+  <h1>REXX · 15 armas originais</h1>
+  <p id="status">Carregando…</p>
+  <div id="gallery" class="grid"></div>
+  <script src="../../../js/config.js"></script>
+  <script src="../../../js/data/weapons.js"></script>
+  <script src="atlas-data.js"></script>
+  <script src="../../../js/core/weaponSprites.js"></script>
+  <script>
+    const sprites = new Rexx.WeaponSprites("./");
+    sprites.loaded.then((ok) => {
+      document.getElementById("status").textContent = ok
+        ? "Armas-base. Evoluções usam a mesma arte com os efeitos existentes do jogo."
+        : "Falha ao carregar weapons.png.";
+      if (!ok) return;
+      for (const weapon of Rexx.data.weapons) {
+        const figure = document.createElement("figure"),
+          c = document.createElement("canvas"),
+          caption = document.createElement("figcaption");
+        c.width = c.height = 180;
+        sprites.draw(c.getContext("2d"), weapon.id, 90, 90, 150);
+        caption.textContent = weapon.name;
+        figure.append(c, caption);
+        document.getElementById("gallery").append(figure);
+      }
+    });
+  </script>
+</html>
