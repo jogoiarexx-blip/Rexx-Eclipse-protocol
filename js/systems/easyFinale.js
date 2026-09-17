@@ -82,7 +82,7 @@ Rexx.EasyFinale = class {
         g.state = "playing";
         g.app.audio.mode = "boss";
         g.camera.shake = 25;
-        g.alert("CAÇADOR DA FENDA · 1000 HP", 3);
+        g.alert(`CAÇADOR DA FENDA · ${Rexx.DEMON_CONFIG.hp} HP`, 3);
       }
     } else if (
       this.phase === "death" &&

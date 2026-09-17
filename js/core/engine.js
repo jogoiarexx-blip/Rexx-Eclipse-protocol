@@ -26,6 +26,7 @@ Rexx.Engine = class {
     let dt = Math.min(0.05, (t - this.last) / 1000 || 0.016);
     this.last = t;
     this.fps += (1 / Math.max(0.001, dt) - this.fps) * 0.03;
+    this.app.input.pollPause();
     const g = this.app.game;
     if (g) {
       let remaining = dt;
@@ -135,32 +136,8 @@ Rexx.Engine = class {
     c.strokeRect(0, 0, Rexx.C.world, Rexx.C.world);
     c.globalAlpha = 1;
     for (const o of g.objectives) {
-      c.strokeStyle = o.done ? "#789591" : g.map.color;
-      c.fillStyle = "#101e28";
-      c.lineWidth = 2;
-      c.beginPath();
-      c.arc(o.x, o.y, 35, 0, 7);
-      c.fill();
-      c.stroke();
-      c.beginPath();
-      c.arc(o.x, o.y, 44, -1.57, -1.57 + (o.progress / 12) * 6.283);
-      c.stroke();
-      c.font = "19px monospace";
-      c.fillStyle = g.map.color;
-      c.textAlign = "center";
-      c.fillText(o.done ? "✓" : "⌘", o.x, o.y + 6);
-      if (Rexx.util.dist(o, g.player) < 160) {
-        c.font = "11px monospace";
-        c.fillText(
-          o.done
-            ? "RESTAURADO"
-            : "PERMANEÇA PRÓXIMO · " +
-                Math.floor((o.progress / 12) * 100) +
-                "%",
-          o.x,
-          o.y + 65,
-        );
-      }
+      if (o.x + 200 < left || o.x - 200 > right || o.y + 200 < top || o.y - 200 > bottom) continue;
+      Rexx.RelayVisual.draw(c, g, o);
     }
     g.zones.each((z) => {
       if (z.x + z.r < left || z.x - z.r > right) return;

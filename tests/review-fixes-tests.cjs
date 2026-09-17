@@ -1,0 +1,14 @@
+const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('assert/strict');
+const R={}, ctx={Rexx:R,Math,Set,Map,window:{addEventListener(){}},navigator:{getGamepads:()=>[pad]}};
+let pad={buttons:Array.from({length:10},()=>({pressed:false})),axes:[0,0]};
+for(const f of ['core/collision.js','core/pool.js','entities/projectile.js','core/input.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../js',f),'utf8'),ctx);
+const grid=new R.SpatialHash(96);const boss={active:true,x:110,y:50,r:60,uid:1};grid.insert(boss);
+assert.ok(grid.query(40,50,15).includes(boss),'Boss overlap across cell border');
+assert.equal(R.sweepCircle(0,0,200,0,100,0,10),.45);assert.equal(R.sweepCircle(0,30,200,30,100,0,10),null);
+const hits=[],g={state:'playing',grid,projectiles:new R.Pool(R.Projectile.create,10),particles:{flash(){},burst(){}},damage:{hit(e){hits.push(e.uid);return 1;},player(){hits.push('player');}},player:{x:100,y:0,r:15}};
+grid.clear();const far={active:true,x:140,y:0,r:10,uid:2},near={active:true,x:60,y:0,r:10,uid:3};grid.insert(far);grid.insert(near);
+let shot=R.Projectile.spawn(g,{x:0,y:0,vx:12000,life:2,pierce:0});R.Projectile.update(g,shot,1/60);assert.deepEqual(hits,[3],'Nearest impact wins, regardless of insertion order');
+hits.length=0;shot=R.Projectile.spawn(g,{x:0,y:0,vx:12000,life:2,pierce:3});R.Projectile.update(g,shot,1/60);assert.deepEqual(hits,[3,2],'Piercing processes swept path in order');
+hits.length=0;shot=R.Projectile.spawn(g,{x:0,y:0,vx:12000,life:2,hostile:true});R.Projectile.update(g,shot,1/60);assert.deepEqual(hits,['player']);
+let pauses=0;R.app={pause(){pauses++;}};const input=new R.Input(()=>{});pad.buttons[9].pressed=true;input.pollPause();input.pollPause();assert.equal(pauses,1);pad.buttons[9].pressed=false;input.pollPause();pad.buttons[9].pressed=true;input.pollPause();assert.equal(pauses,2,'Pause and resume without movement update');
+console.log('PASS: spatial boundary, swept miss/hit, ordered impact, piercing, hostile shot and gamepad pause/resume.');

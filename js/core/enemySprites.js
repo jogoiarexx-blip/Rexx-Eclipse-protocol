@@ -74,6 +74,8 @@ Rexx.EnemySprites = class {
     context.fill();
     if (entity.flash > 0) context.globalAlpha = 0.55;
     context.imageSmoothingEnabled = false;
+    context.save();
+    if (match.sheet.direction === "right") context.scale(entity.facing < 0 ? -1 : 1, 1);
     context.drawImage(
       image,
       frame.x,
@@ -85,6 +87,7 @@ Rexx.EnemySprites = class {
       frame.w * scale,
       frame.h * scale,
     );
+    context.restore();
     context.globalAlpha = 1;
     if (entity.elite || frozen || entity.shield > 0) {
       context.strokeStyle = frozen

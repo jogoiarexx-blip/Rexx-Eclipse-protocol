@@ -23,7 +23,13 @@ Rexx.Input = class {
         onPause();
     });
   }
+  pollPause() {
+    const pressed = !!navigator.getGamepads?.()[0]?.buttons[9]?.pressed;
+    if (pressed && !this.padPause) Rexx.app.pause();
+    this.padPause = pressed;
+  }
   axis() {
+    this.pollPause();
     let x =
         Number(this.keys.has("d") || this.keys.has("arrowright")) -
         Number(this.keys.has("a") || this.keys.has("arrowleft")),
@@ -34,9 +40,7 @@ Rexx.Input = class {
     if (pad) {
       if (Math.abs(pad.axes[0]) > 0.18) x = pad.axes[0];
       if (Math.abs(pad.axes[1]) > 0.18) y = pad.axes[1];
-      let p = pad.buttons[9]?.pressed;
-      if (p && !this.padPause) Rexx.app.pause();
-      this.padPause = p;
+
     }
     let n = Math.max(1, Math.hypot(x, y));
     return { x: x / n, y: y / n };

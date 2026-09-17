@@ -123,3 +123,7 @@ A tentativa de instalar o Chromium headless neste ambiente não concluiu: o down
 
 ## v1.2.2 — efeitos de combate
 32 grupos de regressão/balanceamento e verificação dos assets passaram em JSDOM + Canvas nativo. `tests/combat-fx-tests.cjs` verifica renderização, qualidade baixa e isolamento do estado visual. Prévia dos efeitos inspecionada. Teste em navegador real e medição de FPS pendentes.
+
+
+## v1.2.3
+32 grupos de regressão e balanceamento aprovados em JSDOM + Canvas nativo. Teste específico `node tests/demon-sprites-tests.cjs`: alfa real, 24 poses, renderização espelhada, estado visual isolado da hitbox, ciclo de corrida e último frame de morte. Prévia dos recortes inspecionada. Validação em navegador real pendente.

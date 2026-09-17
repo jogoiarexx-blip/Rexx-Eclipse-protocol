@@ -322,6 +322,27 @@ window.runBalanceTests = function () {
       ),
     );
   });
+  test("Relays activate sequentially and retire after three rewards", () => {
+    for (const id of ["easy", "normal"]) {
+      const g = fresh(id);
+      let chests = 0;
+      const spawn = R.Pickup.spawn;
+      R.Pickup.spawn = (game, x, y, type) => { if (type === "chest") chests++; };
+      try {
+        for (let i = 0; i < 3; i++) {
+          ok(g.objectives.length === 1);
+          const o = g.objectives[0];
+          g.player.x = o.x; g.player.y = o.y;
+          g.updateObjective(12);
+          ok(o.done && g.completedObjectives === i + 1);
+        }
+        ok(g.objectives.length === 0 && g.pendingObjectives.length === 0);
+        g.updateObjective(100);
+        ok(chests === 3);
+        ok(g.stats.coins === (id === "easy" ? 0 : 240));
+      } finally { R.Pickup.spawn = spawn; }
+    }
+  });
   A.save = saved;
   if (raw === null) localStorage.removeItem(R.Save.key);
   else localStorage.setItem(R.Save.key, raw);

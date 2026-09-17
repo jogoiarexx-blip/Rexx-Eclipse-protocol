@@ -33,6 +33,8 @@ Rexx.Scenery = class {
     if (Math.hypot(x - center, y - center) < 180) return null;
     for (const o of g.objectives)
       if (Math.hypot(x - o.x, y - o.y) < 180) return null;
+    for (const o of g.pendingObjectives || [])
+      if (Math.hypot(x - o.x, y - o.y) < 180) return null;
     return {
       x,
       y,

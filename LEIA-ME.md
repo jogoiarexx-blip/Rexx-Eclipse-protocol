@@ -1,6 +1,8 @@
-# REXX: ECLIPSE PROTOCOL — v1.2.2
+# REXX: ECLIPSE PROTOCOL — v1.2.8
 
-**v1.2.1:** demônio com 5.000 HP. Visual procedural animado em Canvas, sem sprite sheet própria.
+**v1.2.3:** demônio com atlas WebP transparente e seis animações; esquerda por espelhamento horizontal do mesmo atlas.
+
+**Histórico v1.2.1:** demônio com 5.000 HP. Visual procedural animado em Canvas, sem sprite sheet própria.
 
 **Balanceamento atual:** minichefe aos 10:00; chefe + dois minichefes aos 15:00. Fácil não concede moedas permanentes e possui o evento secreto do demônio. Detalhes em `ATUALIZACAO-1.2.0.md`.
 
@@ -110,3 +112,9 @@ Os itens coletáveis agora usam 12 sprites em `assets/images/pickups/`: quatro c
 ## Arsenal visual — v1.0.6
 
 15 sprites de armas-base integrados ao arsenal, HUD e escolhas de upgrade. Lâminas orbitais, drones, discos de íon e arcos de retorno também usam sprites no combate. Arquivos, atlas, galeria e prompt em `assets/images/weapons/`; renderizador em `js/core/weaponSprites.js`. Evoluções compartilham a arte-base; feixes, áreas e demais efeitos continuam procedurais.
+
+
+**v1.2.4:** abra `PREVIA-DEMONIO.html` para inspecionar as animações, espelhamento, pivô e hitbox. O relógio da corrida continua após reações de dano; ataques não são interrompidos visualmente por impactos.
+
+
+**v1.2.5:** correções de colisão de tiros rápidos, bordas dos chefes e pausa por controle. Consulte `ANALISE-1.2.5.md`.

@@ -34,11 +34,13 @@ Rexx.Game = class {
     this.particles = new Rexx.Particles(this);
     this.weapons = new Rexx.Weapons(this);
     this.director = new Rexx.Director(this);
-    this.objectives = [
+    this.pendingObjectives = [
       { x: 2500, y: 2500, progress: 0, done: false },
       { x: 3850, y: 3150, progress: 0, done: false },
       { x: 3000, y: 4100, progress: 0, done: false },
     ];
+    this.objectives = [this.pendingObjectives.shift()];
+    this.completedObjectives = 0;
     this.app.audio.mode = "map";
     this.alert("PROTOCOLO INICIADO · " + map.name);
     for (let i = 0; i < 12; i++)
@@ -66,7 +68,9 @@ Rexx.Game = class {
     this.weapons.update(dt);
     if (this.state !== "playing") return;
     this.projectiles.each((p) => Rexx.Projectile.update(this, p, dt));
+    if (this.state !== "playing") return;
     this.updateZones(dt);
+    if (this.state !== "playing") return;
     this.pickups.each((p) => Rexx.Pickup.update(this, p, dt));
     this.lines.each((l) => {
       l.life -= dt;
@@ -74,26 +78,29 @@ Rexx.Game = class {
     });
     this.particles.update(dt);
     this.camera.update(this.player, dt);
-    for (const o of this.objectives)
-      if (!o.done && Rexx.util.dist(o, this.player) < 90) {
-        o.progress += dt;
-        if (o.progress >= 12) {
-          o.done = true;
-          this.addCoins(80);
-          Rexx.Pickup.spawn(this, o.x, o.y, "chest");
-          this.alert(
-            this.difficulty.id === "easy"
-              ? "RETRANSMISSOR RESTAURADO"
-              : "RETRANSMISSOR RESTAURADO · +80 MOEDAS",
-          );
-        }
-      }
+    if (this.objectives.length) this.updateObjective(dt);
     if (this.state === "playing") {
       if (this.chestQueue) {
         this.chestQueue--;
         this.openChest();
       } else if (this.pendingLevels) this.openLevel();
     }
+  }
+  updateObjective(dt) {
+    const o = this.objectives[0];
+    if (!o || o.done || this.state !== "playing" || Rexx.util.dist(o, this.player) >= 90) return;
+    o.progress += dt;
+    if (o.progress < 12) return;
+    o.done = true;
+    this.completedObjectives++;
+    this.addCoins(80);
+    Rexx.Pickup.spawn(this, o.x, o.y, "chest");
+    this.particles.flash(o.x, o.y, this.map.color, 105);
+    this.objectives.length = 0;
+    const next = this.pendingObjectives.shift();
+    if (next) this.objectives.push(next);
+    this.alert(`RETRANSMISSOR ${this.completedObjectives}/3 RESTAURADO` +
+      (next ? " · NOVO SINAL NO MINIMAPA" : " · TODOS CONCLUÍDOS"));
   }
   addCoins(amount) {
     const earned =
@@ -220,6 +227,7 @@ Rexx.Game = class {
   }
   updateZones(dt) {
     this.zones.each((z) => {
+      if (this.state !== "playing") return;
       if (z.delay > 0) {
         z.delay -= dt;
         if (z.playerPull) {

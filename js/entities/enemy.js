@@ -25,6 +25,7 @@ Rexx.Enemy = {
       timer: Rexx.util.rand(1, 3),
       phase: 0,
       charge: 0,
+      facing: 1,
       vx: 0,
       vy: 0,
       flash: 0,
@@ -81,6 +82,7 @@ Rexx.Enemy = {
     if (type === "charge") {
       if (e.charge > 0) {
         e.charge -= dt;
+        if (Math.abs(e.vx) > 0.1) e.facing = e.vx < 0 ? -1 : 1;
         e.x += e.vx * dt;
         e.y += e.vy * dt;
         return;
@@ -127,7 +129,9 @@ Rexx.Enemy = {
       return;
     }
     let wobble = type === "fly" ? Math.sin(g.time * 4 + e.uid) * 0.8 : 0;
-    e.x += (dx / n - (wobble * dy) / n) * speed * dt;
+    const moveX = (dx / n - (wobble * dy) / n) * speed;
+    if (Math.abs(moveX) > 0.1) e.facing = moveX < 0 ? -1 : 1;
+    e.x += moveX * dt;
     e.y += (dy / n + (wobble * dx) / n) * speed * dt;
     if (e.elite && Math.floor(g.time * 2 + e.uid) % 12 === 0 && e.timer < 1) {
       g.hostile(e.x, e.y, Math.atan2(dy, dx), 210, e.damage);

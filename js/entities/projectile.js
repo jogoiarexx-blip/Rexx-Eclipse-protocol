@@ -1,5 +1,5 @@
 Rexx.Projectile = {
-  create: () => ({ active: false, hits: new Set() }),
+  create: () => ({ active: false, hits: new Set(), contacts: [] }),
   spawn(g, o) {
     const p = g.projectiles.get();
     if (!p) return null;
@@ -32,6 +32,7 @@ Rexx.Projectile = {
     return p;
   },
   update(g, p, dt) {
+    if (g.state !== "playing") return;
     p.life -= dt;
     p.age += dt;
     if (p.life <= 0) {
@@ -53,18 +54,34 @@ Rexx.Projectile = {
           if (k.active && Math.hypot(k.x - p.x, k.y - p.y) < 85)
             k.magnet = true;
     }
+    const fromX = p.x, fromY = p.y;
     p.x += p.vx * dt;
     p.y += p.vy * dt;
     if (p.hostile) {
-      if (Math.hypot(p.x - g.player.x, p.y - g.player.y) < p.r + 15) {
+      if (Rexx.sweepCircle(fromX, fromY, p.x, p.y, g.player.x, g.player.y, p.r + g.player.r) !== null) {
         g.damage.player(p.damage);
         g.projectiles.release(p);
       }
       return;
     }
-    for (const e of g.grid.query(p.x, p.y, p.r + 28)) {
-      if (p.hits.has(e.uid) || Math.hypot(e.x - p.x, e.y - p.y) > e.r + p.r)
-        continue;
+    const endX = p.x, endY = p.y;
+    const contacts = p.contacts;
+    contacts.length = 0;
+    const range = Math.hypot(endX - fromX, endY - fromY) / 2 + p.r;
+    for (const e of g.grid.query((fromX + endX) / 2, (fromY + endY) / 2, range)) {
+      if (p.hits.has(e.uid)) continue;
+      const t = Rexx.sweepCircle(fromX, fromY, endX, endY, e.x, e.y, e.r + p.r);
+      if (t !== null) contacts.push(e);
+    }
+    contacts.sort((a, b) =>
+      Rexx.sweepCircle(fromX, fromY, endX, endY, a.x, a.y, a.r + p.r) -
+      Rexx.sweepCircle(fromX, fromY, endX, endY, b.x, b.y, b.r + p.r));
+    for (const e of contacts) {
+      if (!e.active || g.state !== "playing") continue;
+      const t = Rexx.sweepCircle(fromX, fromY, endX, endY, e.x, e.y, e.r + p.r);
+      if (t === null) continue;
+      p.x = fromX + (endX - fromX) * t;
+      p.y = fromY + (endY - fromY) * t;
       p.hits.add(e.uid);
       const dealt = g.damage.hit(e, p.damage, p.weapon, p.status, 40);
       if (dealt > 0) {
@@ -92,12 +109,13 @@ Rexx.Projectile = {
           p.vx = Math.cos(a) * v;
           p.vy = Math.sin(a) * v;
         }
-        break;
+        return;
       }
       if (p.pierce-- <= 0) {
         g.projectiles.release(p);
         break;
       }
     }
+    if (p.active) { p.x = endX; p.y = endY; }
   },
 };

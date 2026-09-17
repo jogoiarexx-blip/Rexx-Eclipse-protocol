@@ -1,4 +1,4 @@
-// Original procedural enemy; animation states do not depend on external art.
+// Sprite animation with procedural fallback if the atlas cannot load.
 Rexx.Demon = {
   spawn(g) {
     if (g.difficulty.id !== "easy" || !g.bossFinalDefeated) return null;
@@ -48,12 +48,16 @@ Rexx.Demon = {
       grace: cfg.spawnGrace,
       hitLock: 0,
       anim: "idle",
+      animTime: 0,
+      runTime: 0,
       facing: direction > 0 ? -1 : 1,
     });
     return e;
   },
   update(g, e, dt) {
+    const previousAnim = e.anim;
     e.age += dt;
+    e.animTime += dt;
     e.flash = Math.max(0, e.flash - dt);
     e.grace = Math.max(0, e.grace - dt);
     e.hitLock = Math.max(0, e.hitLock - dt);
@@ -62,7 +66,7 @@ Rexx.Demon = {
     const dx = g.player.x - e.x,
       dy = g.player.y - e.y,
       n = Math.hypot(dx, dy) || 1;
-    e.facing = dx < 0 ? -1 : 1;
+    if (Math.abs(dx) > 0.5) e.facing = dx < 0 ? -1 : 1;
     const travel = Math.min(
       e.speed * dt,
       Math.max(0, n - e.r - g.player.r + 3),
@@ -71,15 +75,18 @@ Rexx.Demon = {
     e.vy = (dy / n) * e.speed;
     e.x += (dx / n) * travel;
     e.y += (dy / n) * travel;
-    e.anim = e.flash > 0 ? "hurt" : e.attackPose > 0 ? "attack" : "run";
+    if (travel > 0.001) e.runTime = (e.runTime || 0) + dt;
+    e.anim = e.attackPose > 0 ? "attack" : e.flash > 0 ? "hurt" : travel > 0.001 ? "run" : "idle";
     if (n <= e.r + g.player.r + 5 && e.attackTimer <= 0 && e.grace <= 0) {
       e.attackTimer = Rexx.DEMON_CONFIG.attackCooldown;
       e.attackPose = 0.3;
       e.anim = "attack";
       g.damage.player(e.damage, { source: e, trueDamage: true });
     }
+    if (e.anim !== previousAnim) e.animTime = 0;
   },
   draw(c, e, time, mode = e.anim) {
+    if (Rexx.app?.demonSprites?.draw(c, e, time, mode)) return;
     const run = mode === "run",
       laugh = mode === "laugh",
       dead = mode === "death";
